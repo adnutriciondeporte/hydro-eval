@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>HydroEval Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d45;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --accent3: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 80px; }
+
+/* HEADER */
+.app-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(0,212,255,0.06) 0%, transparent 100%);
+}
+.app-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-logo span { color: var(--text); }
+.app-tagline {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.author-tag {
+  font-size: 0.65rem;
+  color: var(--accent2);
+  font-family: 'DM Mono', monospace;
+  margin-top: 4px;
+}
+
+/* NAV TABS */
+.nav-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 12px 8px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(0,212,255,0.05);
+}
+
+/* SECTIONS */
+.section { display: none; padding: 20px; }
+.section.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--card-shadow);
+}
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* FORM */
+.field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.field-group.full { grid-template-columns: 1fr; }
+.field-group.trio { grid-template-columns: 1fr 1fr 1fr; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 0.65rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.field input, .field select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: border 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.field input:focus, .field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.12);
+}
+.field select option { background: var(--surface); }
+
+/* BUTTON */
+.btn-calc {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent) 0%, #0099cc 100%);
+  border: none;
+  border-radius: 12px;
+  color: #0a0e1a;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  text-transform: uppercase;
+}
+.btn-calc:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,212,255,0.35); }
+.btn-calc:active { transform: translateY(0); }
+
+/* RESULTS */
+.results-wrap { display: none; animation: fadeUp 0.4s ease; }
+.results-wrap.show { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.metric {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 12px;
+  position: relative;
+  overflow: hidden;
+}
+.metric::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 3px 0 0 3px;
+}
+.metric.warn::before { background: var(--warn); }
+.metric.danger::before { background: var(--danger); }
+.metric.good::before { background: var(--accent3); }
+.metric.purple::before { background: var(--accent2); }
+
+.metric-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.metric.warn .metric-val { color: var(--warn); }
+.metric.danger .metric-val { color: var(--danger); }
+.metric.good .metric-val { color: var(--accent3); }
+.metric.purple .metric-val { color: var(--accent2); }
+.metric-label { font-size: 0.62rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.metric-sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+/* ALERT BOXES */
+.alert {
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  border: 1px solid;
+}
+.alert.good { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); color: #6ee7b7; }
+.alert.warn { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); color: #fcd34d; }
+.alert.danger { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); color: #fca5a5; }
+.alert.info { background: rgba(0,212,255,0.07); border-color: rgba(0,212,255,0.2); color: #7dd3fc; }
+.alert strong { display: block; font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 4px; }
+
+/* USG TABLE */
+.usg-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; margin-top: 8px; }
+.usg-table th {
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-size: 0.6rem;
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.usg-table td { padding: 7px 10px; border-bottom: 1px solid rgba(30,45,69,0.5); color: var(--text); }
+.usg-table tr.highlight td { background: rgba(0,212,255,0.1); color: var(--accent); font-weight: 600; border-radius: 6px; }
+.usg-table tr.highlight.warn td { background: rgba(245,158,11,0.1); color: var(--warn); }
+.usg-table tr.highlight.danger td { background: rgba(239,68,68,0.1); color: var(--danger); }
+
+/* FORMULA BOX */
+.formula-box {
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  line-height: 1.9;
+  margin-top: 10px;
+}
+.formula-box b { color: var(--accent); font-weight: 500; }
+
+/* SODIO SECTION */
+.sodium-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-family: 'DM Mono', monospace;
+  color: #c4b5fd;
+  margin-bottom: 12px;
+}
+
+/* READING INPUTS */
+.reading-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+
+/* TABS CONTENT HEADER */
+.section-header {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.section-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 16px 0;
+}
+
+/* REPORT */
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(30,45,69,0.5);
+  font-size: 0.78rem;
+}
+.report-row:last-child { border-bottom: none; }
+.report-key { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.65rem; text-transform: uppercase; }
+.report-val { color: var(--text); font-weight: 500; }
+
+/* RECOM CARDS */
+.recom-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(30,45,69,0.5);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.recom-item:last-child { border-bottom: none; }
+.recom-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.recom-text { color: var(--text); }
+.recom-text b { color: var(--accent); font-weight: 600; }
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.6rem;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.badge.good { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+.badge.warn { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+.badge.danger { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+.badge.info { background: rgba(0,212,255,0.1); color: #7dd3fc; border: 1px solid rgba(0,212,255,0.25); }
+
+.hint { font-size: 0.65rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 4px; }
+
+.section-divider {
+  text-align: center;
+  position: relative;
+  margin: 20px 0 16px;
+}
+.section-divider span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent2);
+  background: var(--bg);
+  padding: 0 12px;
+  position: relative;
+  z-index: 1;
+}
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+}
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="app-logo">💧 <span>Hydro</span>Eval
+      <span style="font-size:0.7rem;color:var(--muted);font-weight:400;margin-left:4px;font-family:'DM Mono',monospace">PRO</span>
+    </div>
+    <div class="app-tagline">Evaluación de hidratación y sodio en deportistas</div>
+    <div class="author-tag">by Daniela Reyes · Nutrición Deportiva</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('deportista')">👤 Deportista</button>
+    <button class="tab-btn" onclick="showTab('sudor')">💦 Test Sudor</button>
+    <button class="tab-btn" onclick="showTab('sodio')">🧂 Test Sodio</button>
+    <button class="tab-btn" onclick="showTab('reporte')">📋 Reporte</button>
+  </div>
+
+  <!-- TAB 1: DEPORTISTA -->
+  <div class="section active" id="tab-deportista">
+    <div class="section-header">Datos del deportista</div>
+    <div class="section-desc">Completa la información del evaluado/a y las condiciones del test</div>
+
+    <div class="card">
+      <div class="card-title">Identificación</div>
+      <div class="field-group full">
+        <div class="field">
+          <label>Nombre completo</label>
+          <input type="text" id="nombre" placeholder="Nombre del deportista">
+        </div>
+      </div>
+      <div class="field-group trio">
+        <div class="field">
+          <label>Edad</label>
+          <input type="number" id="edad" placeholder="años">
+        </div>
+        <div class="field">
+          <label>Sexo</label>
+          <select id="sexo">
+            <option value="">—</option>
+            <option>Femenino</option>
+            <option>Masculino</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Objetivo</label>
+          <select id="objetivo">
+            <option value="">—</option>
+            <option>Rendimiento</option>
+            <option>Salud</option>
+            <option>Seguimiento</option>
+            <option>Investigación</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Contexto del test</div>
+      <div class="field-group full">
+        <div class="field">
+          <label>Disciplina deportiva</label>
+          <select id="disciplina">
+            <option value="">Selecciona</option>
+            <option>Triatlón</option>
+            <option>Running</option>
+            <option>Calistenia</option>
+            <option>Básquetbol</option>
+            <option>Fútbol</option>
+            <option>Voleibol</option>
+            <option>Atletismo / Endurance</option>
+            <option>Ciclismo</option>
+            <option>Natación</option>
+            <option>Tenis</option>
+            <option>Rugby</option>
+            <option>Fútbol americano</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label>Tipo de sesión</label>
+          <select id="tipo_sesion">
+            <option value="">—</option>
+            <option>Entrenamiento</option>
+            <option>Partido preparatorio</option>
+            <option>Competencia oficial</option>
+            <option>Test de laboratorio</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ambiente</label>
+          <select id="ambiente">
+            <option value="">—</option>
+            <option value="indoor">Indoor</option>
+            <option value="exterior">Exterior</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label>Lugar</label>
+          <input type="text" id="lugar" placeholder="Ej: Gimnasio Municipal, Temuco">
+        </div>
+      </div>
+      <div class="field-group trio">
+        <div class="field">
+          <label>Fecha</label>
+          <input type="date" id="fecha">
+        </div>
+        <div class="field">
+          <label>Hora</label>
+          <input type="time" id="hora">
+        </div>
+        <div class="field">
+          <label>Temp. °C</label>
+          <input type="number" id="temp_amb" step="0.1" placeholder="22.0">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label>Humedad rel. %</label>
+          <input type="number" id="humedad" step="1" placeholder="—">
+        </div>
+        <div class="field">
+          <label>Duración (min)</label>
+          <input type="number" id="duracion" placeholder="60">
+        </div>
+      </div>
+    </div>
+    <button class="btn-calc" onclick="showTab('sudor')">Continuar → Test de Sudor</button>
+  </div>
+
+  <!-- TAB 2: TEST DE SUDOR -->
+  <div class="section" id="tab-sudor">
+    <div class="section-header">Test de hidratación</div>
+    <div class="section-desc">Ingresa los pesos y volúmenes para calcular la tasa de sudoración y el nivel de deshidratación</div>
+
+    <div class="card">
+      <div class="card-title">Mediciones corporales</div>
+      <div class="field-group">
+        <div class="field">
+          <label>Peso PRE (kg)</label>
+          <input type="number" id="peso_pre" step="0.1" placeholder="58.3">
+        </div>
+        <div class="field">
+          <label>Peso POST (kg)</label>
+          <input type="number" id="peso_post" step="0.1" placeholder="57.5">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label>Líquido ingerido (L)</label>
+          <input type="number" id="liquido" step="0.01" placeholder="1.20">
+        </div>
+        <div class="field">
+          <label>Orina excretada (L)</label>
+          <input type="number" id="orina" step="0.01" placeholder="0.35">
+          <span class="hint">0 si no hubo micción</span>
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label>Tiempo de actividad (min)</label>
+          <input type="number" id="tiempo" placeholder="60">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Refractómetro — Aquatwin / USG</div>
+      <div class="sodium-pill">📊 Gravedad específica de orina (PRE-ejercicio)</div>
+      <div class="field-group full">
+        <div class="field">
+          <label>USG medido</label>
+          <input type="number" id="usg" step="0.001" placeholder="1.018">
+          <span class="hint">Rango normal deportista: 1.015 – 1.020</span>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <div style="font-size:0.65rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;">Tabla de referencia</div>
+        <table class="usg-table" id="usg-ref">
+          <tr><th>Nivel de hidratación</th><th>USG</th></tr>
+          <tr><td>Extremadamente hiperhidratado</td><td>&lt; 1.012</td></tr>
+          <tr><td>Algo hiperhidratado</td><td>1.012–1.014</td></tr>
+          <tr><td>Bien hidratado</td><td>1.015–1.017</td></tr>
+          <tr><td>Euhidratado</td><td>1.018–1.020</td></tr>
+          <tr><td>Algo deshidratado</td><td>1.021–1.024</td></tr>
+          <tr><td>Muy deshidratado</td><td>1.025–1.027</td></tr>
+          <tr><td>Extremadamente deshidratado</td><td>&gt; 1.027</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <button class="btn-calc" onclick="calcularSudor()">⚡ Calcular resultados</button>
+
+    <!-- RESULTADOS SUDOR -->
+    <div class="results-wrap" id="resultados-sudor">
+      <div class="section-divider"><span>Resultados</span></div>
+
+      <div class="metric-grid" id="metrics-sudor"></div>
+      <div id="alert-sudor"></div>
+      <div id="alert-usg"></div>
+
+      <div class="card">
+        <div class="card-title">Fórmulas utilizadas</div>
+        <div class="formula-box">
+          <b>Pérdida de sudor</b> = (Peso pre − Peso post) + Líquido ingerido − Orina<br>
+          <b>% Deshidratación</b> = (Peso pre − Peso post) / Peso pre × 100<br>
+          <b>Tasa sudoración</b> = Pérdida sudor / Tiempo (h)<br>
+          <b>Reposición post</b> = Pérdida de masa × 1.5 (ACSM)<br>
+          <b>Reposición durante</b> = Tasa × 15 min
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: SODIO -->
+  <div class="section" id="tab-sodio">
+    <div class="section-header">Test de sodio en sudor</div>
+    <div class="section-desc">Ingresa las lecturas del LAQUAtwin Na-11 para calcular pérdidas de sodio</div>
+
+    <div class="card">
+      <div class="card-title">Datos del parche</div>
+      <div class="field-group">
+        <div class="field">
+          <label>Lado del cuerpo</label>
+          <select id="lado_parche">
+            <option value="">—</option>
+            <option>Derecho</option>
+            <option>Izquierdo</option>
+            <option>Promedio D+I</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>N° de parche</label>
+          <select id="num_parche">
+            <option>1</option>
+            <option>2</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group trio">
+        <div class="field">
+          <label>Hora colocación</label>
+          <input type="time" id="hora_col">
+        </div>
+        <div class="field">
+          <label>Hora retiro</label>
+          <input type="time" id="hora_ret">
+        </div>
+        <div class="field">
+          <label>Masa sudor (g)</label>
+          <input type="number" id="masa_sudor" step="0.01" placeholder="0.60">
+          <span class="hint">Meta: 0.5–0.7 g</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Lecturas LAQUAtwin Na-11</div>
+      <div class="sodium-pill">📐 Unidad: mg/L — Fondo a restar: 103 mg/L</div>
+      <div class="field-group trio">
+        <div class="field">
+          <label>Lectura 1</label>
+          <input type="number" id="lec1" step="0.1" placeholder="mg/L">
+        </div>
+        <div class="field">
+          <label>Lectura 2</label>
+          <input type="number" id="lec2" step="0.1" placeholder="mg/L">
+        </div>
+        <div class="field">
+          <label>Lectura 3</label>
+          <input type="number" id="lec3" step="0.1" placeholder="mg/L">
+        </div>
+      </div>
+      <div class="hint" style="margin-top:4px;">Según protocolo, restar 103 ± 7 mg/L de sodio de fondo de los materiales (Tegaderm + jeringa)</div>
+
+      <div class="field-group" style="margin-top:12px;">
+        <div class="field">
+          <label>Calibración (150 ppm)</label>
+          <select id="cal_baja">
+            <option value="ok">✓ Realizada</option>
+            <option value="no">✗ No realizada</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Calibración (2000 ppm)</label>
+          <select id="cal_alta">
+            <option value="ok">✓ Realizada</option>
+            <option value="no">✗ No realizada</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-calc" onclick="calcularSodio()">🧂 Calcular pérdida de sodio</button>
+
+    <!-- RESULTADOS SODIO -->
+    <div class="results-wrap" id="resultados-sodio">
+      <div class="section-divider"><span>Resultados sodio</span></div>
+      <div class="metric-grid" id="metrics-sodio"></div>
+      <div id="alert-sodio"></div>
+      <div id="clasificacion-sodio"></div>
+
+      <div class="card">
+        <div class="card-title">Fórmulas y correcciones</div>
+        <div class="formula-box">
+          <b>Promedio bruto</b> = (L1 + L2 + L3) / 3<br>
+          <b>CV%</b> = (DE / Promedio) × 100<br>
+          <b>Na corregido</b> = Promedio − 103 mg/L (fondo materiales)<br>
+          <b>Na en mmol/L</b> = Na corregido (mg/L) / 22.99<br>
+          <b>Pérdida Na (mmol/h)</b> = Na (mmol/L) × Tasa sudoración (L/h)<br>
+          <b>Pérdida Na (mg/h)</b> = Pérdida (mmol/h) × 23
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: REPORTE -->
+  <div class="section" id="tab-reporte">
+    <div class="section-header">Reporte de evaluación</div>
+    <div class="section-desc">Resumen completo y recomendaciones personalizadas</div>
+    <div id="reporte-contenido">
+      <div class="alert info">
+        <strong>ℹ️ Reporte no disponible</strong>
+        Completa el Test de Sudor y/o el Test de Sodio para generar el reporte completo.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── STATE ──
+const state = {
+  sudor: null,
+  sodio: null,
+  usg: null
+};
+
+// ── TABS ──
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.getAttribute('onclick').includes(id)) b.classList.add('active');
+  });
+}
+
+// ── USG CLASSIFICATION ──
+function clasificarUSG(val) {
+  if (val < 1.012) return { label: 'Extremadamente hiperhidratado', cls: 'info', emoji: '🔵' };
+  if (val <= 1.014) return { label: 'Algo hiperhidratado', cls: 'info', emoji: '🔵' };
+  if (val <= 1.017) return { label: 'Bien hidratado', cls: 'good', emoji: '✅' };
+  if (val <= 1.020) return { label: 'Euhidratado', cls: 'good', emoji: '✅' };
+  if (val <= 1.024) return { label: 'Algo deshidratado', cls: 'warn', emoji: '⚠️' };
+  if (val <= 1.027) return { label: 'Muy deshidratado', cls: 'warn', emoji: '⚠️' };
+  return { label: 'Extremadamente deshidratado', cls: 'danger', emoji: '🔴' };
+}
+
+// ── DESHIDRATACIÓN % ──
+function clasificarDesh(pct) {
+  if (pct < 1) return { label: 'Mínima', cls: 'good', badge: 'good' };
+  if (pct < 2) return { label: 'Leve', cls: 'warn', badge: 'warn' };
+  if (pct < 3) return { label: 'Moderada', cls: 'danger', badge: 'danger' };
+  return { label: 'Severa', cls: 'danger', badge: 'danger' };
+}
+
+// ── SODIO CLASIFICACIÓN ──
+function clasificarSodio(mmol) {
+  if (mmol < 25) return { label: 'Bajo perdedor de sodio', cls: 'info', recom: 'No requiere estrategia especial de reposición de sodio. Agua durante el ejercicio suele ser suficiente en sesiones < 90 min.' };
+  if (mmol < 50) return { label: 'Perdedor moderado', cls: 'warn', recom: 'Incluir bebida deportiva con sodio (400–700 mg/L) durante el ejercicio. Priorizar reposición post-ejercicio con alimentos salados.' };
+  if (mmol < 80) return { label: 'Alto perdedor de sodio', cls: 'danger', recom: 'Estrategia de sodio individualizada necesaria. Usar bebidas con ≥ 700 mg/L de sodio. Considerar suplementos de sodio (tabletas) en sesiones prolongadas.' };
+  return { label: 'Muy alto perdedor (Salty Sweater)', cls: 'danger', recom: 'Pérdidas críticas de sodio. Requiere protocolo de reposición específico. Evaluar con médico/nutricionista deportivo. Riesgo de hiponatremia en eventos largos.' };
+}
+
+// ── CALCULAR SUDOR ──
+function calcularSudor() {
+  const pre = parseFloat(document.getElementById('peso_pre').value);
+  const post = parseFloat(document.getElementById('peso_post').value);
+  const liquido = parseFloat(document.getElementById('liquido').value) || 0;
+  const orina = parseFloat(document.getElementById('orina').value) || 0;
+  const tiempo = parseFloat(document.getElementById('tiempo').value);
+  const usgVal = parseFloat(document.getElementById('usg').value);
+
+  if (isNaN(pre) || isNaN(post) || isNaN(tiempo) || tiempo <= 0) {
+    alert('Por favor completa: Peso PRE, Peso POST y Duración.');
+    return;
+  }
+
+  const horas = tiempo / 60;
+  const perdidaMasa = pre - post;
+  const perdidaSudor = perdidaMasa + liquido - orina;
+  const pctDesh = (perdidaMasa / pre) * 100;
+  const tasaLHr = perdidaSudor / horas;
+  const tasaMlMin = (perdidaSudor * 1000) / tiempo;
+  const reposPost = perdidaMasa * 1.5;
+  const reposDurante = Math.round(tasaMlMin * 15);
+
+  const deshClass = clasificarDesh(pctDesh);
+
+  // Guardar en state
+  state.sudor = { pre, post, liquido, orina, tiempo, horas, perdidaMasa, perdidaSudor, pctDesh, tasaLHr, tasaMlMin, reposPost, reposDurante };
+
+  // Métricas
+  document.getElementById('metrics-sudor').innerHTML = `
+    <div class="metric ${deshClass.cls === 'good' ? 'good' : deshClass.cls === 'warn' ? 'warn' : 'danger'}">
+      <div class="metric-val">${pctDesh.toFixed(2)}%</div>
+      <div class="metric-label">% Deshidratación</div>
+      <div class="metric-sub"><span class="badge ${deshClass.badge}">${deshClass.label}</span></div>
+    </div>
+    <div class="metric">
+      <div class="metric-val">${perdidaSudor.toFixed(2)} L</div>
+      <div class="metric-label">Pérdida de sudor</div>
+      <div class="metric-sub">${perdidaMasa.toFixed(1)} kg masa perdida</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val">${tasaLHr.toFixed(2)} L/h</div>
+      <div class="metric-label">Tasa sudoración</div>
+      <div class="metric-sub">${tasaMlMin.toFixed(1)} ml/min</div>
+    </div>
+    <div class="metric warn">
+      <div class="metric-val">${reposPost.toFixed(2)} L</div>
+      <div class="metric-label">Reposición post</div>
+      <div class="metric-sub">ACSM 150% pérdida</div>
+    </div>
+  `;
+
+  // Alert deshidratación
+  const alertMap = {
+    good: `<strong>✅ Hidratación adecuada (${pctDesh.toFixed(1)}% pérdida)</strong>La pérdida de masa fue menor al 1%. El rendimiento no debería verse comprometido. Mantener la estrategia actual.`,
+    warn: `<strong>⚠️ Deshidratación leve (${pctDesh.toFixed(1)}%)</strong>A partir del 1% puede afectarse el rendimiento cognitivo y físico. Se recomienda aumentar la ingesta durante el ejercicio a ~${reposDurante} ml cada 15 minutos.`,
+    danger: `<strong>🔴 Deshidratación significativa (${pctDesh.toFixed(1)}%)</strong>Superar el 2% compromete seriamente el rendimiento y la salud. Revisar protocolo de hidratación urgentemente.`
+  };
+  document.getElementById('alert-sudor').innerHTML = `<div class="alert ${deshClass.cls}">${alertMap[deshClass.cls] || alertMap.danger}</div>`;
+
+  // USG
+  if (!isNaN(usgVal) && usgVal > 0) {
+    const usgClass = clasificarUSG(usgVal);
+    state.usg = { val: usgVal, ...usgClass };
+    document.getElementById('alert-usg').innerHTML = `
+      <div class="alert ${usgClass.cls}">
+        <strong>${usgClass.emoji} USG ${usgVal.toFixed(3)} — ${usgClass.label}</strong>
+        Estado de hidratación previo al ejercicio según gravedad específica de orina (refractómetro).
+      </div>`;
+    // Highlight tabla
+    highlightUSG(usgVal);
+  }
+
+  document.getElementById('resultados-sudor').classList.add('show');
+  generarReporte();
+}
+
+function highlightUSG(val) {
+  const rows = document.querySelectorAll('#usg-ref tr');
+  rows.forEach(r => r.classList.remove('highlight','warn','danger'));
+  if (val < 1.012) rows[1]?.classList.add('highlight');
+  else if (val <= 1.014) rows[2]?.classList.add('highlight');
+  else if (val <= 1.017) rows[3]?.classList.add('highlight');
+  else if (val <= 1.020) rows[4]?.classList.add('highlight');
+  else if (val <= 1.024) { rows[5]?.classList.add('highlight','warn'); }
+  else if (val <= 1.027) { rows[6]?.classList.add('highlight','warn'); }
+  else { rows[7]?.classList.add('highlight','danger'); }
+}
+
+// ── CALCULAR SODIO ──
+function calcularSodio() {
+  const l1 = parseFloat(document.getElementById('lec1').value);
+  const l2 = parseFloat(document.getElementById('lec2').value);
+  const l3 = parseFloat(document.getElementById('lec3').value);
+
+  if (isNaN(l1) || isNaN(l2) || isNaN(l3)) {
+    alert('Ingresa las 3 lecturas del LAQUAtwin.');
+    return;
+  }
+
+  if (document.getElementById('cal_baja').value === 'no' || document.getElementById('cal_alta').value === 'no') {
+    alert('⚠️ Advertencia: La calibración del LAQUAtwin no fue completada. Los resultados pueden no ser válidos.');
+  }
+
+  const promBruto = (l1 + l2 + l3) / 3;
+  const desv = Math.sqrt(((l1-promBruto)**2 + (l2-promBruto)**2 + (l3-promBruto)**2) / 2);
+  const cv = (desv / promBruto) * 100;
+  const fondo = 103;
+  const naCorr = Math.max(0, promBruto - fondo);
+  const naMmol = naCorr / 22.99;
+  const masaSudor = parseFloat(document.getElementById('masa_sudor').value) || null;
+
+  // Pérdida por hora (si tenemos tasa)
+  let perdidaNaMmolH = null, perdidaNaMgH = null;
+  if (state.sudor) {
+    perdidaNaMmolH = naMmol * state.sudor.tasaLHr;
+    perdidaNaMgH = perdidaNaMmolH * 23;
+  }
+
+  const sodioClass = clasificarSodio(naMmol);
+  state.sodio = { promBruto, cv, naCorr, naMmol, perdidaNaMmolH, perdidaNaMgH, sodioClass };
+
+  // Métricas
+  let metricsHTML = `
+    <div class="metric purple">
+      <div class="metric-val">${naCorr.toFixed(0)} mg/L</div>
+      <div class="metric-label">Na corregido</div>
+      <div class="metric-sub">Bruto: ${promBruto.toFixed(0)} − 103 fondo</div>
+    </div>
+    <div class="metric purple">
+      <div class="metric-val">${naMmol.toFixed(1)} mmol/L</div>
+      <div class="metric-label">Na en sudor</div>
+      <div class="metric-sub">CV: ${cv.toFixed(1)}% ${cv > 10 ? '⚠️' : '✓'}</div>
+    </div>
+  `;
+  if (perdidaNaMmolH !== null) {
+    metricsHTML += `
+    <div class="metric purple">
+      <div class="metric-val">${perdidaNaMmolH.toFixed(1)} mmol/h</div>
+      <div class="metric-label">Pérdida Na/hora</div>
+      <div class="metric-sub">${perdidaNaMgH.toFixed(0)} mg/h</div>
+    </div>
+    <div class="metric warn">
+      <div class="metric-val">${(perdidaNaMgH * state.sudor.horas).toFixed(0)} mg</div>
+      <div class="metric-label">Pérdida total Na</div>
+      <div class="metric-sub">en ${state.sudor.tiempo} min</div>
+    </div>`;
+  }
+  document.getElementById('metrics-sodio').innerHTML = metricsHTML;
+
+  // Alert CV
+  let alertCV = '';
+  if (cv > 10) {
+    alertCV = `<div class="alert warn"><strong>⚠️ CV elevado (${cv.toFixed(1)}%)</strong>Variabilidad entre lecturas superior al 10%. Considerar remedir la muestra o verificar limpieza del sensor.</div>`;
+  }
+
+  // Alert masa parche
+  let alertMasa = '';
+  if (masaSudor !== null && masaSudor > 0.7) {
+    alertMasa = `<div class="alert danger"><strong>🔴 Parche posiblemente saturado</strong>La masa de sudor (${masaSudor.toFixed(2)} g) supera 0.7 g. Según protocolo, la muestra debe excluirse del análisis.</div>`;
+  }
+
+  document.getElementById('alert-sodio').innerHTML = alertCV + alertMasa;
+
+  // Clasificación y recomendaciones
+  document.getElementById('clasificacion-sodio').innerHTML = `
+    <div class="alert ${sodioClass.cls}">
+      <strong>🧂 ${sodioClass.label} — ${naMmol.toFixed(1)} mmol/L</strong>
+      ${sodioClass.recom}
+    </div>
+    <div class="card">
+      <div class="card-title">Recomendaciones de reposición de sodio</div>
+      ${recomSodio(naMmol, perdidaNaMgH, state.sudor)}
+    </div>
+  `;
+
+  document.getElementById('resultados-sodio').classList.add('show');
+  generarReporte();
+}
+
+function recomSodio(naMmol, perdidaMgH, sudor) {
+  let items = [];
+
+  if (naMmol < 25) {
+    items.push({ icon: '💧', text: '<b>Durante el ejercicio:</b> agua sola es suficiente en sesiones < 60 min. Para sesiones más largas, incluir bebida con 200–400 mg/L de sodio.' });
+    items.push({ icon: '🍽️', text: '<b>Post-ejercicio:</b> alimentación normal restaura el sodio perdido sin necesidad de suplementación adicional.' });
+  } else if (naMmol < 50) {
+    const mgPorLitro = naMmol * 23;
+    items.push({ icon: '💧', text: `<b>Durante el ejercicio:</b> bebida deportiva con 400–700 mg/L de sodio. Con tasa de sudoración de ${sudor ? sudor.tasaLHr.toFixed(2) : '?'} L/h, aporta ~${sudor ? Math.round(mgPorLitro * sudor.tasaLHr * 0.7) : '?'} mg Na/h.` });
+    items.push({ icon: '🧂', text: '<b>Post-ejercicio:</b> alimentos salados + bebida con sodio en las 2 horas posteriores.' });
+    items.push({ icon: '⏱️', text: `<b>Reposición total estimada:</b> ${sudor && perdidaMgH ? Math.round(perdidaMgH * sudor.horas).toLocaleString() : '—'} mg de sodio en el período post.` });
+  } else if (naMmol < 80) {
+    const total = sudor && perdidaMgH ? Math.round(perdidaMgH * sudor.horas) : null;
+    items.push({ icon: '🔴', text: '<b>Alto perdedor:</b> usar bebida deportiva con ≥ 700 mg/L de sodio durante el ejercicio.' });
+    items.push({ icon: '💊', text: '<b>Considerar:</b> tabletas de sodio (250–500 mg/tableta) en ejercicios > 90 min.' });
+    items.push({ icon: '📊', text: `<b>Meta de reposición:</b> reponer al menos 50–75% de pérdidas = ${total ? Math.round(total * 0.6).toLocaleString() : '—'} mg de sodio post-ejercicio.` });
+  } else {
+    items.push({ icon: '🚨', text: '<b>Salty Sweater:</b> pérdidas muy elevadas. Protocolo individual obligatorio.' });
+    items.push({ icon: '👩‍⚕️', text: '<b>Derivar a:</b> nutricionista deportivo/médico del deporte para estrategia personalizada.' });
+    items.push({ icon: '💊', text: '<b>Suplementación:</b> tabletas de sodio + bebida hipotónica con sodio durante el ejercicio.' });
+  }
+
+  items.push({ icon: '🌊', text: `<b>Agua durante ejercicio:</b> ~${sudor ? sudor.reposDurante : '—'} ml cada 15 min para mantener hidratación.` });
+
+  return items.map(i => `<div class="recom-item"><span class="recom-icon">${i.icon}</span><span class="recom-text">${i.text}</span></div>`).join('');
+}
+
+// ── GENERAR REPORTE ──
+function generarReporte() {
+  const nombre = document.getElementById('nombre').value || '—';
+  const fecha = document.getElementById('fecha').value || '—';
+  const disciplina = document.getElementById('disciplina').value || '—';
+  const lugar = document.getElementById('lugar').value || '—';
+  const temp = document.getElementById('temp_amb').value || '—';
+  const ambiente = document.getElementById('ambiente').value || '—';
+  const tipo = document.getElementById('tipo_sesion').value || '—';
+
+  let html = `
+    <div class="card">
+      <div class="card-title">Datos del evaluado</div>
+      <div class="report-row"><span class="report-key">Nombre</span><span class="report-val">${nombre}</span></div>
+      <div class="report-row"><span class="report-key">Fecha</span><span class="report-val">${fecha}</span></div>
+      <div class="report-row"><span class="report-key">Disciplina</span><span class="report-val">${disciplina}</span></div>
+      <div class="report-row"><span class="report-key">Sesión</span><span class="report-val">${tipo}</span></div>
+      <div class="report-row"><span class="report-key">Lugar</span><span class="report-val">${lugar}</span></div>
+      <div class="report-row"><span class="report-key">Temp. / Ambiente</span><span class="report-val">${temp}°C / ${ambiente}</span></div>
+    </div>
+  `;
+
+  if (state.sudor) {
+    const s = state.sudor;
+    const dc = clasificarDesh(s.pctDesh);
+    html += `
+      <div class="card">
+        <div class="card-title">Test de hidratación</div>
+        <div class="report-row"><span class="report-key">Peso PRE / POST</span><span class="report-val">${s.pre} / ${s.post} kg</span></div>
+        <div class="report-row"><span class="report-key">Pérdida de masa</span><span class="report-val">${s.perdidaMasa.toFixed(1)} kg</span></div>
+        <div class="report-row"><span class="report-key">Pérdida de sudor</span><span class="report-val">${s.perdidaSudor.toFixed(2)} L</span></div>
+        <div class="report-row"><span class="report-key">% Deshidratación</span>
+          <span class="report-val">${s.pctDesh.toFixed(2)}% <span class="badge ${dc.badge}">${dc.label}</span></span>
+        </div>
+        <div class="report-row"><span class="report-key">Tasa sudoración</span><span class="report-val">${s.tasaLHr.toFixed(2)} L/h (${s.tasaMlMin.toFixed(1)} ml/min)</span></div>
+        <div class="report-row"><span class="report-key">Reposición post (ACSM)</span><span class="report-val">${s.reposPost.toFixed(2)} L</span></div>
+        <div class="report-row"><span class="report-key">Hidratación durante</span><span class="report-val">~${s.reposDurante} ml / 15 min</span></div>
+        ${state.usg ? `<div class="report-row"><span class="report-key">USG (refractómetro)</span><span class="report-val">${state.usg.val.toFixed(3)} — ${state.usg.label}</span></div>` : ''}
+      </div>
+    `;
+  }
+
+  if (state.sodio) {
+    const so = state.sodio;
+    html += `
+      <div class="card">
+        <div class="card-title">Test de sodio (LAQUAtwin)</div>
+        <div class="report-row"><span class="report-key">Na promedio bruto</span><span class="report-val">${so.promBruto.toFixed(0)} mg/L</span></div>
+        <div class="report-row"><span class="report-key">Corrección fondo</span><span class="report-val">− 103 mg/L</span></div>
+        <div class="report-row"><span class="report-key">Na corregido</span><span class="report-val">${so.naCorr.toFixed(0)} mg/L</span></div>
+        <div class="report-row"><span class="report-key">Na en mmol/L</span><span class="report-val">${so.naMmol.toFixed(1)} mmol/L</span></div>
+        <div class="report-row"><span class="report-key">CV%</span><span class="report-val">${so.cv.toFixed(1)}% ${so.cv > 10 ? '⚠️' : '✓'}</span></div>
+        <div class="report-row"><span class="report-key">Clasificación</span><span class="report-val">${so.sodioClass.label}</span></div>
+        ${so.perdidaNaMgH ? `<div class="report-row"><span class="report-key">Pérdida Na/hora</span><span class="report-val">${so.perdidaNaMgH.toFixed(0)} mg/h (${so.perdidaNaMmolH.toFixed(1)} mmol/h)</span></div>` : ''}
+        ${so.perdidaNaMgH && state.sudor ? `<div class="report-row"><span class="report-key">Pérdida Na total</span><span class="report-val">${Math.round(so.perdidaNaMgH * state.sudor.horas).toLocaleString()} mg</span></div>` : ''}
+      </div>
+    `;
+
+    if (state.sudor) {
+      html += `
+        <div class="card">
+          <div class="card-title">Recomendaciones integradas</div>
+          ${recomSodio(so.naMmol, so.perdidaNaMgH, state.sudor)}
+        </div>
+      `;
+    }
+  }
+
+  if (!state.sudor && !state.sodio) {
+    html = `<div class="alert info"><strong>ℹ️ Reporte no disponible</strong>Completa el Test de Sudor y/o el Test de Sodio para generar el reporte.</div>`;
+  }
+
+  document.getElementById('reporte-contenido').innerHTML = html;
+}
+
+// Init fecha/hora
+document.getElementById('fecha').valueAsDate = new Date();
+document.getElementById('hora').value = new Date().toTimeString().slice(0,5);
+</script>
+</body>
+</html>
