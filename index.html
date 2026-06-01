@@ -6,7 +6,7 @@
 <title>HydroEval Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--warn:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--muted:#64748b;--card-shadow:0 4px 24px rgba(0,0,0,.4)}
+:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--warn:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--muted:#64748b;--shadow:0 4px 24px rgba(0,0,0,.4)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
@@ -18,11 +18,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .auth{font-size:.65rem;color:var(--accent2);font-family:'DM Mono',monospace;margin-top:3px}
 .tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;background:var(--surface);position:sticky;top:0;z-index:10}
 .tabs::-webkit-scrollbar{display:none}
-.tb{flex:1;min-width:60px;padding:11px 3px;border:none;background:none;color:var(--muted);font-size:.58rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tb{flex:1;min-width:58px;padding:11px 2px;border:none;background:none;color:var(--muted);font-size:.56rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
 .tb.on{color:var(--accent);border-bottom-color:var(--accent);background:rgba(0,212,255,.05)}
 .sec{display:none;padding:18px}
 .sec.on{display:block}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--card-shadow)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
 .ct{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .ct::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
@@ -41,54 +41,63 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .m{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;position:relative;overflow:hidden}
 .m::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:3px 0 0 3px}
 .m.w::before{background:var(--warn)}.m.d::before{background:var(--danger)}.m.g::before{background:var(--accent3)}.m.p::before{background:var(--accent2)}
-.mv{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:var(--accent);line-height:1}
+.mv{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent);line-height:1}
 .m.w .mv{color:var(--warn)}.m.d .mv{color:var(--danger)}.m.g .mv{color:var(--accent3)}.m.p .mv{color:var(--accent2)}
 .ml{font-size:.6rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
-.ms{font-size:.66rem;color:var(--muted);margin-top:2px}
+.ms{font-size:.64rem;color:var(--muted);margin-top:2px}
 .al{border-radius:12px;padding:13px 15px;margin-bottom:11px;font-size:.78rem;line-height:1.6;border:1px solid}
 .al.g{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25);color:#6ee7b7}
 .al.w{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.25);color:#fcd34d}
 .al.d{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:#fca5a5}
 .al.i{background:rgba(0,212,255,.07);border-color:rgba(0,212,255,.2);color:#7dd3fc}
+.al.p{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25);color:#c4b5fd}
 .al strong{display:block;font-family:'Syne',sans-serif;font-weight:700;margin-bottom:3px}
+/* Plan destacado */
+.plan-box{background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(124,58,237,.08));border:1px solid rgba(0,212,255,.3);border-radius:14px;padding:16px;margin-bottom:12px}
+.plan-title{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:var(--accent);margin-bottom:12px;letter-spacing:.05em}
+.plan-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,212,255,.1)}
+.plan-row:last-child{border-bottom:none}
+.plan-key{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace}
+.plan-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--accent)}
+.plan-val.w{color:var(--warn)}.plan-val.d{color:var(--danger)}.plan-val.p{color:#c4b5fd}
+.plan-sub{font-size:.62rem;color:var(--muted);text-align:right;margin-top:1px}
+/* Borg */
+.borg-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:10px 0}
+.borg-btn{padding:8px 4px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--muted);font-size:.65rem;font-family:'DM Mono',monospace;cursor:pointer;text-align:center;transition:all .2s}
+.borg-btn:hover{border-color:var(--accent);color:var(--accent)}
+.borg-btn.on{background:rgba(0,212,255,.15);border-color:var(--accent);color:var(--accent);font-weight:700}
+.borg-btn.on.w{background:rgba(245,158,11,.15);border-color:var(--warn);color:var(--warn)}
+.borg-btn.on.d{background:rgba(239,68,68,.15);border-color:var(--danger);color:var(--danger)}
+/* Tables */
 .tb2{width:100%;border-collapse:collapse;font-size:.7rem;margin-top:7px}
-.tb2 th{font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-size:.58rem;padding:5px 9px;text-align:left;border-bottom:1px solid var(--border)}
-.tb2 td{padding:6px 9px;border-bottom:1px solid rgba(30,45,69,.5);color:var(--text)}
+.tb2 th{font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-size:.58rem;padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.tb2 td{padding:6px 8px;border-bottom:1px solid rgba(30,45,69,.5);color:var(--text)}
 .tb2 tr.hl td{background:rgba(0,212,255,.1);color:var(--accent);font-weight:600}
 .tb2 tr.hl.w td{background:rgba(245,158,11,.1);color:var(--warn)}
 .tb2 tr.hl.d td{background:rgba(239,68,68,.1);color:var(--danger)}
-.fb{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:11px 13px;font-family:'DM Mono',monospace;font-size:.63rem;color:var(--muted);line-height:1.9;margin-top:9px}
+.fb{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:11px 13px;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);line-height:1.9;margin-top:9px}
 .fb b{color:var(--accent);font-weight:500}
-.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:4px 11px;font-size:.68rem;font-family:'DM Mono',monospace;color:#c4b5fd;margin-bottom:11px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:4px 11px;font-size:.67rem;font-family:'DM Mono',monospace;color:#c4b5fd;margin-bottom:11px}
 .sh{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px}
-.sd{font-size:.73rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.sd{font-size:.72rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
 .sdiv{text-align:center;position:relative;margin:18px 0 14px}
 .sdiv span{font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent2);background:var(--bg);padding:0 11px;position:relative;z-index:1}
 .sdiv::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
 .rr{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(30,45,69,.5);font-size:.76rem;gap:9px}
 .rr:last-child{border-bottom:none}
-.rk{color:var(--muted);font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;flex-shrink:0}
+.rk{color:var(--muted);font-family:'DM Mono',monospace;font-size:.61rem;text-transform:uppercase;flex-shrink:0}
 .rv{color:var(--text);font-weight:500;text-align:right}
-.ri{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid rgba(30,45,69,.5);font-size:.76rem;line-height:1.5}
-.ri:last-child{border-bottom:none}
-.ric{font-size:1rem;flex-shrink:0;margin-top:1px}
-.rit{color:var(--text)}
-.rit b{color:var(--accent);font-weight:600}
 .bdg{display:inline-block;padding:2px 7px;border-radius:20px;font-size:.58rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 .bdg.g{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.3)}
 .bdg.w{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.3)}
 .bdg.d{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
 .bdg.i{background:rgba(0,212,255,.1);color:#7dd3fc;border:1px solid rgba(0,212,255,.25)}
 .ht{font-size:.62rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px}
-/* Armstrong */
 .ag{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin:10px 0}
 .ac{height:34px;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:border .2s,transform .15s}
-.ac:hover{transform:scale(1.08)}
-.ac.on{border-color:white;transform:scale(1.12)}
-/* Refs */
+.ac:hover{transform:scale(1.08)}.ac.on{border-color:white;transform:scale(1.12)}
 .rb{background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.1);border-radius:10px;padding:11px 13px;margin-top:14px;font-size:.6rem;color:var(--muted);line-height:1.8;font-family:'DM Mono',monospace}
-.rb b{color:var(--accent2);display:block;margin-bottom:5px;font-size:.63rem;text-transform:uppercase;letter-spacing:.06em}
-/* Firma */
+.rb b{color:var(--accent2);display:block;margin-bottom:5px;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em}
 .firma{border-top:1px solid var(--border);margin-top:18px;padding-top:14px;text-align:center}
 .fl{width:180px;height:1px;background:var(--text);margin:28px auto 7px}
 .fn{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:var(--text)}
@@ -149,7 +158,28 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="fi"><label>Duracion (min)</label><input type="number" id="dur" placeholder="60"></div>
     </div>
   </div>
-  <div class="rb"><b>Referencias</b>Sawka MN et al. (2007). ACSM position stand: Exercise and fluid replacement. Med Sci Sports Exerc, 39(2), 377-390. Casa DJ et al. (2000). NATA position statement: fluid replacement for athletes. J Athl Train, 35(2), 212-224.</div>
+  <div class="card">
+    <div class="ct">Intensidad de la sesion</div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:10px;line-height:1.5">Selecciona la intensidad percibida segun Escala de Borg (6-20) y registra la FC promedio de la sesion</div>
+    <div style="font-size:.62rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:8px;text-transform:uppercase">Escala de Borg (6=reposo, 20=maximo esfuerzo)</div>
+    <div class="borg-grid" id="borggrid">
+      <div class="borg-btn" onclick="selBorg(6)">6<br><span style="font-size:.5rem">Muy suave</span></div>
+      <div class="borg-btn" onclick="selBorg(8)">8<br><span style="font-size:.5rem">Suave</span></div>
+      <div class="borg-btn" onclick="selBorg(11)">11<br><span style="font-size:.5rem">Moderado</span></div>
+      <div class="borg-btn" onclick="selBorg(13)">13<br><span style="font-size:.5rem">Algo duro</span></div>
+      <div class="borg-btn" onclick="selBorg(15)">15<br><span style="font-size:.5rem">Duro</span></div>
+      <div class="borg-btn" onclick="selBorg(17)">17<br><span style="font-size:.5rem">Muy duro</span></div>
+      <div class="borg-btn" onclick="selBorg(19)">19<br><span style="font-size:.5rem">Muy muy duro</span></div>
+      <div class="borg-btn" onclick="selBorg(20)">20<br><span style="font-size:.5rem">Maximo</span></div>
+    </div>
+    <div id="borg-res" style="margin-bottom:10px"></div>
+    <div class="fg">
+      <div class="fi"><label>FC promedio sesion (lpm)</label><input type="number" id="fc" placeholder="Ej: 145"></div>
+      <div class="fi"><label>FC maxima estimada</label><input type="number" id="fcmax" placeholder="Ej: 185"><span class="ht">220 - edad si no la sabes</span></div>
+    </div>
+    <div id="fc-res"></div>
+  </div>
+  <div class="rb"><b>Referencias</b>Sawka MN et al. (2007). ACSM position stand: Exercise and fluid replacement. Med Sci Sports Exerc, 39(2), 377-390. Borg G (1982). Psychophysical bases of perceived exertion. Med Sci Sports Exerc, 14(5), 377-381. Casa DJ et al. (2000). NATA position statement: fluid replacement for athletes. J Athl Train, 35(2), 212-224.</div>
   <button class="btn" onclick="go('sw')">Continuar al Test de Sudor &rarr;</button>
 </div>
 
@@ -172,9 +202,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="card">
     <div class="ct">Refractometro USG - Aquatwin</div>
     <div class="pill">Gravedad especifica de orina PRE-ejercicio</div>
-    <div class="fg f"><div class="fi"><label>USG medido</label><input type="number" id="usg" step="0.001" placeholder="1.018"><span class="ht">Rango optimo deportista: 1.015 - 1.020</span></div></div>
+    <div class="fg f"><div class="fi"><label>USG medido</label><input type="number" id="usg" step="0.001" placeholder="1.018"><span class="ht">Rango optimo: 1.015 - 1.020</span></div></div>
     <div style="margin-top:10px">
-      <div style="font-size:.62rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em">Clasificacion USG</div>
+      <div style="font-size:.62rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:7px;text-transform:uppercase">Clasificacion USG</div>
       <table class="tb2" id="usgref">
         <tr><th>Nivel de hidratacion</th><th>USG</th></tr>
         <tr><td>Extremadamente hiperhidratado</td><td>&lt; 1.012</td></tr>
@@ -187,7 +217,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       </table>
     </div>
   </div>
-  <div class="rb"><b>Referencias</b>Armstrong LE et al. (1994). Urinary indices of hydration status. Int J Sport Nutr, 4(3), 265-279. Maughan RJ &amp; Shirreffs SM (2008). Development of individual hydration strategies for athletes. Int J Sport Nutr Exerc Metab, 18(5), 457-472. Cheuvront SN &amp; Kenefick RW (2014). Dehydration: physiology, assessment, and performance effects. Compr Physiol, 4(1), 257-285.</div>
+  <div class="rb"><b>Referencias</b>Armstrong LE et al. (1994). Urinary indices of hydration status. Int J Sport Nutr, 4(3), 265-279. Maughan RJ &amp; Shirreffs SM (2008). Individual hydration strategies. Int J Sport Nutr Exerc Metab, 18(5), 457-472.</div>
   <button class="btn" onclick="calcSudor()">Calcular resultados</button>
   <div class="rw" id="rs">
     <div class="sdiv"><span>Resultados</span></div>
@@ -293,7 +323,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="fi"><label>Dosis por capsula de sodio (mg)</label><input type="number" id="mgcap" value="100" step="10"><span class="ht">Por defecto: 100 mg/capsula</span></div>
     </div>
   </div>
-  <div class="rb"><b>Referencias</b>Baker LB et al. (2014). Validity and reliability of a field technique for sweat Na+ and K+ analysis. J Appl Physiol, 116(3), 346-353. HORIBA Scientific (2021). LAQUAtwin Na-11 application note. Shirreffs SM &amp; Sawka MN (2011). Fluid and electrolyte needs for training and competition. J Sports Sci, 29(S1), S39-S46.</div>
+  <div class="rb"><b>Referencias</b>Baker LB et al. (2014). Validity and reliability of field sweat Na+ analysis. J Appl Physiol, 116(3), 346-353. HORIBA Scientific (2021). LAQUAtwin Na-11 application note. Shirreffs SM &amp; Sawka MN (2011). Fluid and electrolyte needs. J Sports Sci, 29(S1), S39-S46.</div>
   <button class="btn" onclick="calcNa()">Calcular perdida de sodio</button>
   <div class="rw" id="rna">
     <div class="sdiv"><span>Resultados sodio</span></div>
@@ -304,9 +334,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="fb">
         <b>Promedio bruto</b> = (L1+L2+L3)/3<br>
         <b>CV%</b> = (DE/Promedio)x100 - valido si menor 10%<br>
-        <b>Na corregido</b> = Promedio - 103 mg/L (fondo materiales)<br>
+        <b>Na corregido</b> = Promedio - 103 mg/L<br>
         <b>Na mmol/L</b> = Na corregido / 22.99<br>
-        <b>Perdida Na/hora</b> = Na (mmol/L) x Tasa sudoracion (L/h) x 23<br>
+        <b>Perdida Na/hora (mg)</b> = Na (mmol/L) x Tasa (L/h) x 23<br>
         <b>Perdida Na total</b> = Perdida/h x Duracion (h)<br>
         <b>N capsulas</b> = Perdida Na total (mg) / mg por capsula
       </div>
@@ -317,7 +347,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- REPORTE -->
 <div class="sec" id="sec-rp">
   <div class="sh">Reporte de evaluacion</div>
-  <div class="sd">Resumen completo con plan de hidratacion y sodio personalizado</div>
+  <div class="sd">Resumen completo con plan personalizado de agua y sodio</div>
   <div id="repcont">
     <div class="al i"><strong>Reporte no disponible</strong>Completa el Test de Sudor y/o Sodio para generar el reporte.</div>
   </div>
@@ -325,13 +355,48 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 </div>
 
 <script>
-var ST={sudor:null,sodio:null,usg:null,arm:null};
+var ST={sudor:null,sodio:null,usg:null,arm:null,borg:null,fc:null,fcpct:null};
+
 function go(id){
   document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on')});
   document.querySelectorAll('.tb').forEach(function(b){b.classList.remove('on')});
   document.getElementById('sec-'+id).classList.add('on');
   document.querySelectorAll('.tb').forEach(function(b){if(b.getAttribute('onclick').indexOf("'"+id+"'")>-1)b.classList.add('on')});
 }
+
+// BORG
+var BORG_DATA={6:{lbl:'Muy suave',cls:'g',zona:'Zona 1 - Recuperacion activa'},8:{lbl:'Suave',cls:'g',zona:'Zona 1-2 - Base aerobica'},11:{lbl:'Moderado',cls:'g',zona:'Zona 2 - Aerobico moderado'},13:{lbl:'Algo duro',cls:'w',zona:'Zona 3 - Tempo / Umbral'},15:{lbl:'Duro',cls:'w',zona:'Zona 4 - Umbral anaerobico'},17:{lbl:'Muy duro',cls:'d',zona:'Zona 4-5 - Alta intensidad'},19:{lbl:'Muy muy duro',cls:'d',zona:'Zona 5 - VO2max'},20:{lbl:'Maximo esfuerzo',cls:'d',zona:'Zona 5 - Esfuerzo maximo'}};
+
+function selBorg(n){
+  document.querySelectorAll('.borg-btn').forEach(function(b){b.className='borg-btn'});
+  var d=BORG_DATA[n]; ST.borg={n:n,lbl:d.lbl,zona:d.zona,cls:d.cls};
+  event.target.closest('.borg-btn').classList.add('on',d.cls);
+  document.getElementById('borg-res').innerHTML='<div class="al '+d.cls+'" style="margin-bottom:8px;margin-top:8px"><strong>Borg '+n+'/20 - '+d.lbl+'</strong>'+d.zona+'</div>';
+  calcFC();
+}
+
+function calcFC(){
+  var fc=parseFloat(document.getElementById('fc').value);
+  var fcmax=parseFloat(document.getElementById('fcmax').value);
+  var edad=parseFloat(document.getElementById('edad').value);
+  if(isNaN(fcmax)&&!isNaN(edad)) fcmax=220-edad;
+  if(!isNaN(fc)&&!isNaN(fcmax)&&fcmax>0){
+    var pct=Math.round((fc/fcmax)*100);
+    ST.fc=fc; ST.fcmax=fcmax; ST.fcpct=pct;
+    var zona='',cls='g';
+    if(pct<60){zona='Zona 1 - Recuperacion';cls='g'}
+    else if(pct<70){zona='Zona 2 - Aerobico base';cls='g'}
+    else if(pct<80){zona='Zona 3 - Aerobico moderado';cls='w'}
+    else if(pct<90){zona='Zona 4 - Umbral';cls='w'}
+    else{zona='Zona 5 - Alta intensidad';cls='d'}
+    document.getElementById('fc-res').innerHTML='<div class="al '+cls+'" style="margin-top:8px"><strong>FC: '+fc+' lpm ('+pct+'% FC max) - '+zona+'</strong>FC maxima estimada: '+Math.round(fcmax)+' lpm</div>';
+  }
+}
+document.getElementById('fc').addEventListener('input',calcFC);
+document.getElementById('fcmax').addEventListener('input',calcFC);
+document.getElementById('edad').addEventListener('input',calcFC);
+
+// ARMSTRONG
 var AD=[
   {n:1,lbl:'Casi transparente',est:'Hiperhidratado',cls:'i',em:'🔵',rc:'El deportista esta hiperhidratado. Reducir ingesta de liquidos.'},
   {n:2,lbl:'Amarillo muy palido',est:'Bien hidratado',cls:'g',em:'✅',rc:'Hidratacion optima. Mantener estrategia actual.'},
@@ -345,9 +410,10 @@ var AD=[
 function selArm(n){
   document.querySelectorAll('.ac').forEach(function(e,i){e.classList.toggle('on',i===n-1)});
   var d=AD[n-1]; ST.arm=d;
-  document.getElementById('armres').innerHTML='<div class="al '+d.cls+'"><strong>'+d.em+' Escala '+n+'/8 -- '+d.lbl+' -- '+d.est+'</strong>'+d.rc+'</div>';
+  document.getElementById('armres').innerHTML='<div class="al '+d.cls+'"><strong>'+d.em+' Escala '+n+'/8 - '+d.lbl+' - '+d.est+'</strong>'+d.rc+'</div>';
   genRep();
 }
+
 function cUSG(v){
   if(v<1.012)return{lbl:'Extremadamente hiperhidratado',cls:'i',em:'🔵'};
   if(v<=1.014)return{lbl:'Algo hiperhidratado',cls:'i',em:'🔵'};
@@ -363,12 +429,25 @@ function cDesh(p){
   if(p<3)return{lbl:'Moderada',cls:'d',b:'d'};
   return{lbl:'Severa',cls:'d',b:'d'};
 }
-function cNa(m){
-  if(m<25)return{lbl:'Bajo perdedor de sodio',cls:'i',rc:'No requiere estrategia especial. Agua es suficiente en sesiones cortas.'};
-  if(m<50)return{lbl:'Perdedor moderado',cls:'w',rc:'Incluir bebida deportiva con sodio 400-700 mg/L. Reposicion post con alimentos salados.'};
-  if(m<80)return{lbl:'Alto perdedor de sodio',cls:'d',rc:'Estrategia individualizada necesaria. Bebidas con 700 mg/L o mas de sodio + capsulas.'};
-  return{lbl:'Muy alto perdedor -- Salty Sweater',cls:'d',rc:'Perdidas criticas. Protocolo especifico obligatorio. Riesgo de hiponatremia.'};
+
+// CLASIFICACION SODIO basada en perdida TOTAL (mg) no solo concentracion
+function cNaTotal(pnt, horas){
+  // Clasifica por perdida total de sodio en la sesion
+  if(pnt===null) return null;
+  var ph=pnt/horas; // mg/h
+  if(ph<500)return{lbl:'Perdida baja de sodio',cls:'g',nivel:'bajo'};
+  if(ph<1000)return{lbl:'Perdida moderada de sodio',cls:'w',nivel:'moderado'};
+  if(ph<1500)return{lbl:'Perdida alta de sodio',cls:'d',nivel:'alto'};
+  return{lbl:'Perdida muy alta - Salty Sweater',cls:'d',nivel:'muy_alto'};
 }
+// Clasificacion por concentracion (para referencia)
+function cNaConc(m){
+  if(m<25)return{lbl:'Baja concentracion Na',cls:'i'};
+  if(m<50)return{lbl:'Concentracion Na moderada',cls:'w'};
+  if(m<80)return{lbl:'Alta concentracion Na',cls:'d'};
+  return{lbl:'Muy alta concentracion Na',cls:'d'};
+}
+
 function hlUSG(v){
   var rows=document.querySelectorAll('#usgref tr');
   rows.forEach(function(r){r.classList.remove('hl','w','d')});
@@ -380,6 +459,7 @@ function hlUSG(v){
   else if(v<=1.027){rows[6]&&rows[6].classList.add('hl','w')}
   else{rows[7]&&rows[7].classList.add('hl','d')}
 }
+
 function calcSudor(){
   var pre=parseFloat(document.getElementById('pre').value);
   var post=parseFloat(document.getElementById('post').value);
@@ -402,20 +482,21 @@ function calcSudor(){
   document.getElementById('msw').innerHTML=
     '<div class="m '+(dc.cls==='g'?'g':dc.cls==='w'?'w':'d')+'"><div class="mv">'+pd.toFixed(2)+'%</div><div class="ml">% Deshidratacion</div><div class="ms"><span class="bdg '+dc.b+'">'+dc.lbl+'</span></div></div>'+
     '<div class="m"><div class="mv">'+ps.toFixed(2)+' L</div><div class="ml">Perdida de sudor</div><div class="ms">'+pm.toFixed(1)+' kg perdidos</div></div>'+
-    '<div class="m w"><div class="mv">'+ah.toFixed(0)+' ml/h</div><div class="ml">Agua necesaria/hora</div><div class="ms">'+tLh.toFixed(2)+' L/h - '+rd+' ml/15min</div></div>'+
+    '<div class="m w"><div class="mv">'+ah.toFixed(0)+' ml/h</div><div class="ml">Agua necesaria/hora</div><div class="ms">'+tLh.toFixed(2)+' L/h</div></div>'+
     '<div class="m w"><div class="mv">'+rp.toFixed(2)+' L</div><div class="ml">Reposicion post</div><div class="ms">ACSM 150% perdida</div></div>';
-  var amsg={g:'<strong>✅ Hidratacion adecuada ('+pd.toFixed(1)+'%)</strong>Perdida menor al 1%. Rendimiento no comprometido. Agua durante: ~'+rd+' ml cada 15 min.',
-    w:'<strong>⚠️ Deshidratacion leve ('+pd.toFixed(1)+'%)</strong>A partir del 1% se afecta rendimiento cognitivo y fisico. Aumentar ingesta a ~'+rd+' ml cada 15 min.',
-    d:'<strong>🔴 Deshidratacion significativa ('+pd.toFixed(1)+'%)</strong>Superar el 2% compromete seriamente el rendimiento. Revisar protocolo urgentemente.'};
+  var amsg={g:'<strong>✅ Hidratacion adecuada ('+pd.toFixed(1)+'%)</strong>Perdida menor al 1%. Rendimiento no comprometido.',
+    w:'<strong>⚠️ Deshidratacion leve ('+pd.toFixed(1)+'%)</strong>A partir del 1% se afecta rendimiento cognitivo y fisico.',
+    d:'<strong>🔴 Deshidratacion significativa ('+pd.toFixed(1)+'%)</strong>Superar el 2% compromete seriamente el rendimiento.'};
   document.getElementById('asw').innerHTML='<div class="al '+dc.cls+'">'+(amsg[dc.cls]||amsg.d)+'</div>';
   if(!isNaN(usgv)&&usgv>0){
     var uc=cUSG(usgv); ST.usg={val:usgv,lbl:uc.lbl,cls:uc.cls,em:uc.em};
-    document.getElementById('ausg').innerHTML='<div class="al '+uc.cls+'"><strong>'+uc.em+' USG '+usgv.toFixed(3)+' -- '+uc.lbl+'</strong>Estado de hidratacion previo al ejercicio por gravedad especifica de orina.</div>';
+    document.getElementById('ausg').innerHTML='<div class="al '+uc.cls+'"><strong>'+uc.em+' USG '+usgv.toFixed(3)+' - '+uc.lbl+'</strong>Estado de hidratacion previo al ejercicio por gravedad especifica de orina.</div>';
     hlUSG(usgv);
   }
   document.getElementById('rs').classList.add('on');
   genRep();
 }
+
 function calcNa(){
   var l1=parseFloat(document.getElementById('l1').value);
   var l2=parseFloat(document.getElementById('l2').value);
@@ -429,55 +510,100 @@ function calcNa(){
   var desv=Math.sqrt(((l1-prom)*(l1-prom)+(l2-prom)*(l2-prom)+(l3-prom)*(l3-prom))/2);
   var cv=(desv/prom)*100;
   var nac=Math.max(0,prom-103);
-  var nam=nac/22.99;
+  var nam=nac/22.99; // mmol/L concentracion
   var ms=parseFloat(document.getElementById('msud').value)||null;
-  var pnh=null,png=null,pnt=null,caps=null;
+  var pnh=null,png=null,pnt=null,caps=null,phNa=null;
   if(ST.sudor){
-    pnh=nam*ST.sudor.tLh;
-    png=pnh*23;
-    pnt=png*ST.sudor.h;
+    pnh=nam*ST.sudor.tLh;      // mmol/h
+    png=pnh*23;                 // mg/h perdida real
+    pnt=png*ST.sudor.h;        // mg total en la sesion
+    phNa=png;                  // mg/h para recomendacion
     caps=Math.ceil(pnt/mgc);
   }
-  var sc=cNa(nam);
-  ST.sodio={prom:prom,cv:cv,nac:nac,nam:nam,pnh:pnh,png:png,pnt:pnt,caps:caps,mgc:mgc,sc:sc};
+  var sc=cNaConc(nam);
+  var scTotal=ST.sudor?cNaTotal(pnt,ST.sudor.h):null;
+  ST.sodio={prom:prom,cv:cv,nac:nac,nam:nam,pnh:pnh,png:png,pnt:pnt,phNa:phNa,caps:caps,mgc:mgc,sc:sc,scTotal:scTotal};
   var mh='<div class="m p"><div class="mv">'+nac.toFixed(0)+' mg/L</div><div class="ml">Na corregido</div><div class="ms">Bruto: '+prom.toFixed(0)+' - 103 fondo</div></div>'+
-    '<div class="m p"><div class="mv">'+nam.toFixed(1)+' mmol/L</div><div class="ml">Na en sudor</div><div class="ms">CV: '+cv.toFixed(1)+'% '+(cv>10?'⚠️':'✓')+'</div></div>';
+    '<div class="m p"><div class="mv">'+nam.toFixed(1)+' mmol/L</div><div class="ml">Concentracion Na sudor</div><div class="ms">CV: '+cv.toFixed(1)+'% '+(cv>10?'⚠️':'✓')+'</div></div>';
   if(png!==null){
     mh+='<div class="m w"><div class="mv">'+png.toFixed(0)+' mg/h</div><div class="ml">Perdida sodio/hora</div><div class="ms">'+pnh.toFixed(1)+' mmol/h</div></div>'+
-      '<div class="m d"><div class="mv">'+caps+'</div><div class="ml">Capsulas ('+mgc+'mg c/u)</div><div class="ms">Para '+ST.sudor.tmin+' min de sesion</div></div>';
+      '<div class="m d"><div class="mv">'+caps+'</div><div class="ml">Capsulas ('+mgc+'mg c/u)</div><div class="ms">Sesion completa: '+Math.round(pnt)+' mg Na</div></div>';
   }
   document.getElementById('mna').innerHTML=mh;
   var al='';
   if(cv>10)al+='<div class="al w"><strong>⚠️ CV elevado ('+cv.toFixed(1)+'%)</strong>Variabilidad mayor al 10%. Considerar remedir o verificar limpieza del sensor.</div>';
   if(ms!==null&&ms>0.7)al+='<div class="al d"><strong>🔴 Parche saturado ('+ms.toFixed(2)+' g)</strong>Supera 0.7g. Muestra debe excluirse segun protocolo.</div>';
   document.getElementById('ana').innerHTML=al;
-  document.getElementById('cna').innerHTML='<div class="al '+sc.cls+'"><strong>🧂 '+sc.lbl+' -- '+nam.toFixed(1)+' mmol/L</strong>'+sc.rc+'</div>'+
-    '<div class="card"><div class="ct">Recomendaciones de reposicion</div>'+bldRc(nam,png,pnt,caps,mgc,ST.sudor)+'</div>';
+  // Mostrar clasificacion por perdida real (no solo concentracion)
+  var clsShow=scTotal?scTotal.cls:sc.cls;
+  var lblShow=scTotal?scTotal.lbl:sc.lbl;
+  document.getElementById('cna').innerHTML=
+    '<div class="al '+clsShow+'"><strong>🧂 '+lblShow+' - '+png.toFixed(0)+' mg/hora</strong>Perdida total en sesion: '+Math.round(pnt)+' mg de sodio en '+ST.sudor.tmin+' min</div>'+
+    '<div class="al i" style="font-size:.72rem"><strong>ℹ️ Concentracion vs Perdida total</strong>Concentracion en sudor: '+nam.toFixed(1)+' mmol/L ('+sc.lbl+'). La perdida total depende tambien de la tasa de sudoracion, por eso las recomendaciones se basan en mg/hora reales perdidos.</div>';
   document.getElementById('rna').classList.add('on');
   genRep();
 }
-function bldRc(nam,png,pnt,caps,mgc,sw){
-  var ah=sw?Math.round(sw.ah):'--';
-  var rd=sw?sw.rd:'--';
-  var its=[{ic:'💧',tx:'<b>Agua durante el ejercicio:</b> '+ah+' ml/hora ('+rd+' ml cada 15 min)'}];
-  if(nam<25){
-    its.push({ic:'🧂',tx:'<b>Sodio durante:</b> no se requiere suplementacion especial. Agua sola es suficiente en sesiones cortas.'});
-    its.push({ic:'🍽️',tx:'<b>Post-ejercicio:</b> alimentacion normal restaura el sodio. No requiere suplementar.'});
-  } else if(nam<50){
-    its.push({ic:'🧂',tx:'<b>Sodio durante:</b> bebida deportiva con 400-700 mg/L de sodio. Perdida estimada: '+(png?png.toFixed(0):'--')+' mg/h.'});
-    its.push({ic:'💊',tx:'<b>Capsulas sodio ('+mgc+' mg c/u):</b> '+(caps||'--')+' capsulas para el entrenamiento completo.'});
-    its.push({ic:'🍽️',tx:'<b>Post-ejercicio:</b> alimentos salados + bebida con sodio. Reponer aprox. '+(pnt?Math.round(pnt*0.75).toLocaleString():'--')+' mg de sodio.'});
-  } else if(nam<80){
-    its.push({ic:'🔴',tx:'<b>Alto perdedor:</b> bebida con 700 mg/L o mas de sodio. Perdida: '+(png?png.toFixed(0):'--')+' mg/h.'});
-    its.push({ic:'💊',tx:'<b>Capsulas sodio ('+mgc+' mg c/u):</b> <b style="color:var(--danger)">'+(caps||'--')+' capsulas</b> para toda la sesion. Distribuir uniformemente.'});
-    its.push({ic:'📊',tx:'<b>Perdida Na total estimada:</b> '+(pnt?Math.round(pnt).toLocaleString():'--')+' mg en toda la sesion.'});
+
+function genPlan(sw,so){
+  if(!sw)return'';
+  var ah=Math.round(sw.ah);
+  var rd=sw.rd;
+  var sodioH=so?Math.round(so.png):null;
+  var caps=so?so.caps:null;
+  var mgc=so?so.mgc:100;
+  var pnt=so?Math.round(so.pnt):null;
+  var nivel=so&&so.scTotal?so.scTotal.nivel:null;
+
+  // Construir caja de plan destacada
+  var html='<div class="plan-box">';
+  html+='<div class="plan-title">📋 Para sesiones similares a esta, usted requiere:</div>';
+  html+='<div class="plan-row"><span class="plan-key">💧 Agua por hora</span><div><div class="plan-val">'+ah+' ml/hora</div><div class="plan-sub">'+rd+' ml cada 15 minutos</div></div></div>';
+
+  if(sodioH!==null){
+    html+='<div class="plan-row"><span class="plan-key">🧂 Sodio por hora</span><div><div class="plan-val w">'+sodioH+' mg/hora</div><div class="plan-sub">'+so.pnh.toFixed(1)+' mmol/hora</div></div></div>';
+    html+='<div class="plan-row"><span class="plan-key">💊 Capsulas por sesion</span><div><div class="plan-val d">'+caps+' capsulas</div><div class="plan-sub">de '+mgc+'mg c/u (total: '+pnt+' mg Na)</div></div></div>';
+    html+='<div class="plan-row"><span class="plan-key">🌊 Reposicion post</span><div><div class="plan-val">'+sw.rp.toFixed(2)+' L</div><div class="plan-sub">en las 2 horas siguientes (ACSM)</div></div></div>';
   } else {
-    its.push({ic:'🚨',tx:'<b>Salty Sweater:</b> perdidas criticas. Protocolo individual obligatorio con nutricionista deportivo.'});
-    its.push({ic:'💊',tx:'<b>Capsulas sodio ('+mgc+' mg c/u):</b> <b style="color:var(--danger)">'+(caps||'--')+' capsulas minimas</b>. Ajustar con profesional.'});
+    html+='<div class="plan-row"><span class="plan-key">🌊 Reposicion post</span><div><div class="plan-val">'+sw.rp.toFixed(2)+' L</div><div class="plan-sub">en las 2 horas siguientes (ACSM)</div></div></div>';
   }
-  its.push({ic:'🌊',tx:'<b>Reposicion post-ejercicio:</b> '+(sw?sw.rp.toFixed(2):'--')+' L en las proximas 2 horas (ACSM: 150% perdida de masa).'});
-  return its.map(function(i){return'<div class="ri"><span class="ric">'+i.ic+'</span><span class="rit">'+i.tx+'</span></div>'}).join('');
+  html+='</div>';
+
+  // Recomendaciones especificas segun nivel
+  html+='<div class="card"><div class="ct">Estrategia detallada</div>';
+  if(sodioH===null){
+    html+='<div style="font-size:.78rem;color:var(--text);line-height:1.7">'+
+      '<b style="color:var(--accent)">Antes:</b> llegar euhidratado. Verificar USG entre 1.015-1.020.<br>'+
+      '<b style="color:var(--accent)">Durante:</b> beber '+ah+' ml/hora ('+rd+' ml cada 15 min).<br>'+
+      '<b style="color:var(--accent)">Despues:</b> reponer '+sw.rp.toFixed(2)+' L en 2 horas. Incluir sodio en alimentos.'+
+      '</div>';
+  } else if(nivel==='bajo'){
+    html+='<div style="font-size:.78rem;color:var(--text);line-height:1.7">'+
+      '<b style="color:var(--accent)">Antes:</b> llegar euhidratado. Verificar USG entre 1.015-1.020.<br>'+
+      '<b style="color:var(--accent)">Durante:</b> beber '+ah+' ml/hora. Agua sola puede ser suficiente en sesiones cortas, pero se recomienda bebida con minimo 200-400 mg/L de sodio dado que pierde '+sodioH+' mg/hora.<br>'+
+      '<b style="color:var(--accent)">Capsulas:</b> '+caps+' capsulas de '+mgc+'mg distribuidas en la sesion.<br>'+
+      '<b style="color:var(--accent)">Despues:</b> reponer '+sw.rp.toFixed(2)+' L + alimentos salados.'+
+      '</div>';
+  } else if(nivel==='moderado'){
+    var intervalo=caps>0?Math.round(sw.tmin/caps):30;
+    html+='<div style="font-size:.78rem;color:var(--text);line-height:1.7">'+
+      '<b style="color:var(--accent)">Antes:</b> llegar euhidratado. Verificar USG entre 1.015-1.020.<br>'+
+      '<b style="color:var(--accent)">Durante:</b> beber '+ah+' ml/hora con bebida deportiva de 400-700 mg/L de sodio.<br>'+
+      '<b style="color:var(--accent)">Capsulas:</b> '+caps+' capsulas de '+mgc+'mg. Tomar 1 cada '+intervalo+' minutos aprox., siempre con agua.<br>'+
+      '<b style="color:var(--accent)">Despues:</b> reponer '+sw.rp.toFixed(2)+' L + comida rica en sodio (sopas, frutos secos salados, queso).'+
+      '</div>';
+  } else {
+    var intervalo2=caps>0?Math.round(sw.tmin/caps):20;
+    html+='<div style="font-size:.78rem;color:var(--text);line-height:1.7">'+
+      '<b style="color:var(--accent)">Antes:</b> llegar euhidratado. Considerar cargar sodio (500mg) 60-90 min antes en sesiones largas.<br>'+
+      '<b style="color:var(--accent)">Durante:</b> beber '+ah+' ml/hora con bebida de 700mg/L o mas de sodio.<br>'+
+      '<b style="color:var(--accent)">Capsulas:</b> '+caps+' capsulas de '+mgc+'mg. Tomar 1 cada '+intervalo2+' minutos aprox., siempre con agua. Consultar con profesional.<br>'+
+      '<b style="color:var(--accent)">Despues:</b> reponer '+sw.rp.toFixed(2)+' L + alta ingesta de sodio en comida post-entrenamiento.'+
+      '</div>';
+  }
+  html+='</div>';
+  return html;
 }
+
 function genRep(){
   var nm=document.getElementById('nombre').value||'--';
   var ed=document.getElementById('edad').value||'--';
@@ -499,13 +625,16 @@ function genRep(){
     '<div class="rr"><span class="rk">Edad / Sexo</span><span class="rv">'+ed+' anos / '+sx+'</span></div>'+
     '<div class="rr"><span class="rk">Fecha / Hora</span><span class="rv">'+fe+' '+hr+'</span></div>'+
     '<div class="rr"><span class="rk">Disciplina</span><span class="rv">'+di+'</span></div>'+
-    '<div class="rr"><span class="rk">Sesion</span><span class="rv">'+ts+'</span></div>'+
+    '<div class="rr"><span class="rk">Sesion / Ambiente</span><span class="rv">'+ts+' / '+am+'</span></div>'+
     '<div class="rr"><span class="rk">Lugar</span><span class="rv">'+lu+'</span></div>'+
-    '<div class="rr"><span class="rk">Temp / Humedad</span><span class="rv">'+tp+'C / '+hm+'% / '+am+'</span></div>'+
+    '<div class="rr"><span class="rk">Temp / Humedad</span><span class="rv">'+tp+'C / '+hm+'%</span></div>'+
+    (ST.borg?'<div class="rr"><span class="rk">Borg / Intensidad</span><span class="rv">'+ST.borg.n+'/20 - '+ST.borg.lbl+'</span></div>':'')+
+    (ST.fc?'<div class="rr"><span class="rk">FC promedio / % FCmax</span><span class="rv">'+ST.fc+' lpm / '+ST.fcpct+'%</span></div>':'')+
     '</div>';
+
   if(ST.arm){h+='<div class="card"><div class="ct">Color de orina - Escala Armstrong</div>'+
-    '<div class="rr"><span class="rk">Escala visual</span><span class="rv">'+ST.arm.n+'/8 -- '+ST.arm.lbl+'</span></div>'+
-    '<div class="rr"><span class="rk">Estado</span><span class="rv">'+ST.arm.em+' '+ST.arm.est+'</span></div>'+
+    '<div class="rr"><span class="rk">Escala visual</span><span class="rv">'+ST.arm.n+'/8 - '+ST.arm.lbl+'</span></div>'+
+    '<div class="rr"><span class="rk">Estado hidratacion</span><span class="rv">'+ST.arm.em+' '+ST.arm.est+'</span></div>'+
     '</div>';}
   if(ST.usg){h+='<div class="card"><div class="ct">USG - Refractometro Aquatwin</div>'+
     '<div class="rr"><span class="rk">Valor medido</span><span class="rv">'+ST.usg.val.toFixed(3)+'</span></div>'+
@@ -518,43 +647,44 @@ function genRep(){
       '<div class="rr"><span class="rk">Perdida de masa</span><span class="rv">'+s.pm.toFixed(1)+' kg</span></div>'+
       '<div class="rr"><span class="rk">Perdida de sudor</span><span class="rv">'+s.ps.toFixed(2)+' L</span></div>'+
       '<div class="rr"><span class="rk">% Deshidratacion</span><span class="rv">'+s.pd.toFixed(2)+'% <span class="bdg '+dc.b+'">'+dc.lbl+'</span></span></div>'+
-      '<div class="rr"><span class="rk">Tasa sudoracion</span><span class="rv">'+s.tLh.toFixed(2)+' L/h ('+s.tMm.toFixed(1)+' ml/min)</span></div>'+
+      '<div class="rr"><span class="rk">Tasa sudoracion</span><span class="rv">'+s.tLh.toFixed(2)+' L/h</span></div>'+
       '<div class="rr"><span class="rk">💧 Agua necesaria/hora</span><span class="rv"><b>'+s.ah.toFixed(0)+' ml/hora</b></span></div>'+
-      '<div class="rr"><span class="rk">Hidratacion durante</span><span class="rv">~'+s.rd+' ml cada 15 min</span></div>'+
-      '<div class="rr"><span class="rk">Reposicion post ACSM</span><span class="rv">'+s.rp.toFixed(2)+' L en 2 horas</span></div>'+
+      '<div class="rr"><span class="rk">Reposicion post ACSM</span><span class="rv">'+s.rp.toFixed(2)+' L en 2 h</span></div>'+
       '</div>';}
   if(ST.sodio){
     var so=ST.sodio;
+    var clsNa=so.scTotal?so.scTotal.cls:so.sc.cls;
+    var lblNa=so.scTotal?so.scTotal.lbl:so.sc.lbl;
     h+='<div class="card"><div class="ct">Test de sodio - LAQUAtwin Na-11</div>'+
-      '<div class="rr"><span class="rk">Na promedio bruto</span><span class="rv">'+so.prom.toFixed(0)+' mg/L</span></div>'+
-      '<div class="rr"><span class="rk">Na corregido</span><span class="rv">'+so.nac.toFixed(0)+' mg/L (-103 fondo)</span></div>'+
-      '<div class="rr"><span class="rk">Na en mmol/L</span><span class="rv">'+so.nam.toFixed(1)+' mmol/L</span></div>'+
+      '<div class="rr"><span class="rk">Na corregido</span><span class="rv">'+so.nac.toFixed(0)+' mg/L</span></div>'+
+      '<div class="rr"><span class="rk">Concentracion Na</span><span class="rv">'+so.nam.toFixed(1)+' mmol/L</span></div>'+
       '<div class="rr"><span class="rk">CV%</span><span class="rv">'+so.cv.toFixed(1)+'% '+(so.cv>10?'⚠️':'✓')+'</span></div>'+
-      '<div class="rr"><span class="rk">Clasificacion sodio</span><span class="rv">'+so.sc.lbl+'</span></div>'+
-      (so.png?'<div class="rr"><span class="rk">🧂 Perdida sodio/hora</span><span class="rv"><b>'+so.png.toFixed(0)+' mg/h</b> ('+so.pnh.toFixed(1)+' mmol/h)</span></div>':'')+
-      (so.pnt?'<div class="rr"><span class="rk">Perdida Na total sesion</span><span class="rv">'+Math.round(so.pnt).toLocaleString()+' mg</span></div>':'')+
-      (so.caps?'<div class="rr"><span class="rk">💊 Capsulas sodio ('+so.mgc+'mg)</span><span class="rv"><b>'+so.caps+' capsulas</b> por sesion</span></div>':'')+
+      '<div class="rr"><span class="rk">Clasificacion perdida</span><span class="rv">'+lblNa+'</span></div>'+
+      (so.png?'<div class="rr"><span class="rk">🧂 Perdida sodio/hora</span><span class="rv"><b>'+so.png.toFixed(0)+' mg/h</b></span></div>':'')+
+      (so.pnt?'<div class="rr"><span class="rk">Perdida Na total sesion</span><span class="rv">'+Math.round(so.pnt)+' mg</span></div>':'')+
+      (so.caps?'<div class="rr"><span class="rk">💊 Capsulas ('+so.mgc+'mg c/u)</span><span class="rv"><b>'+so.caps+' capsulas/sesion</b></span></div>':'')+
       '</div>';}
-  if(ST.sudor){
-    h+='<div class="card"><div class="ct">Plan de hidratacion y sodio recomendado</div>'+
-      bldRc(ST.sodio?ST.sodio.nam:0,ST.sodio?ST.sodio.png:null,ST.sodio?ST.sodio.pnt:null,ST.sodio?ST.sodio.caps:null,ST.sodio?ST.sodio.mgc:100,ST.sudor)+
-      '</div>';}
+
+  // PLAN PRINCIPAL DESTACADO
+  h+=genPlan(ST.sudor,ST.sodio);
+
   h+='<div class="rb"><b>Referencias bibliograficas</b>'+
-    '1. Sawka MN et al. (2007). ACSM position stand: Exercise and fluid replacement. Med Sci Sports Exerc, 39(2), 377-390.<br>'+
+    '1. Sawka MN et al. (2007). ACSM: Exercise and fluid replacement. Med Sci Sports Exerc, 39(2), 377-390.<br>'+
     '2. Armstrong LE et al. (1994). Urinary indices of hydration status. Int J Sport Nutr, 4(3), 265-279.<br>'+
-    '3. Baker LB et al. (2014). Validity and reliability of field sweat Na+ analysis. J Appl Physiol, 116(3), 346-353.<br>'+
-    '4. Maughan RJ &amp; Shirreffs SM (2008). Individual hydration strategies for athletes. Int J Sport Nutr Exerc Metab, 18(5), 457-472.<br>'+
-    '5. Shirreffs SM &amp; Sawka MN (2011). Fluid and electrolyte needs for training and competition. J Sports Sci, 29(S1), S39-S46.<br>'+
-    '6. Casa DJ et al. (2000). NATA: fluid replacement for athletes. J Athl Train, 35(2), 212-224.<br>'+
-    '7. HORIBA Scientific (2021). LAQUAtwin Na-11 application note: measuring Na+ in sweat.'+
+    '3. Baker LB et al. (2014). Validity of field sweat Na+ analysis. J Appl Physiol, 116(3), 346-353.<br>'+
+    '4. Maughan RJ &amp; Shirreffs SM (2008). Individual hydration strategies. Int J Sport Nutr Exerc Metab, 18(5), 457-472.<br>'+
+    '5. Shirreffs SM &amp; Sawka MN (2011). Fluid and electrolyte needs. J Sports Sci, 29(S1), S39-S46.<br>'+
+    '6. Borg G (1982). Psychophysical bases of perceived exertion. Med Sci Sports Exerc, 14(5), 377-381.<br>'+
+    '7. HORIBA Scientific (2021). LAQUAtwin Na-11 application note.'+
     '</div>';
+
   var hoy=new Date().toLocaleDateString('es-CL',{year:'numeric',month:'long',day:'numeric'});
   h+='<div class="firma">'+
     '<div style="font-size:.65rem;color:var(--muted);font-family:\'DM Mono\',monospace">Evaluacion realizada el '+hoy+'</div>'+
     '<div class="fl"></div>'+
     '<div class="fn">Daniela Reyes Olavarria</div>'+
     '<div class="ft">Nutricionista Deportiva</div>'+
-    '<div class="ft" style="margin-top:2px">HydroEval Pro &middot; Evaluacion de Hidratacion y Sodio en Deportistas</div>'+
+    '<div class="ft" style="margin-top:2px">HydroEval Pro - Evaluacion de Hidratacion y Sodio en Deportistas</div>'+
     '</div>';
   document.getElementById('repcont').innerHTML=h;
 }
