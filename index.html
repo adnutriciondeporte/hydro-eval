@@ -102,6 +102,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .fl{width:180px;height:1px;background:var(--text);margin:28px auto 7px}
 .fn{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:var(--text)}
 .ft{font-size:.65rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px}
+
+.ugrid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin:8px 0}
+.ubtn{border-radius:6px;height:36px;cursor:pointer;border:3px solid transparent;transition:all .15s;position:relative}
+.ubtn:hover{transform:scale(1.07)}
+.ubtn.on{border-color:white;transform:scale(1.12)}
+.unum{position:absolute;bottom:2px;right:4px;font-size:.55rem;font-family:'DM Mono',monospace;font-weight:700;color:rgba(0,0,0,.4)}
+.unum.dk{color:rgba(255,255,255,.6)}
+.btn.sec{background:transparent;border:1px solid var(--border);color:var(--muted);box-shadow:none}
+.btn.sec:hover{border-color:var(--muted);color:var(--text);transform:none}
 </style>
 </head>
 <body>
@@ -113,10 +122,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 </div>
 <div class="tabs">
   <button class="tb on" onclick="go('at')">&#x1F464; Atleta</button>
-  <button class="tb" onclick="go('sw')">&#x1F4A6; Sudor</button>
-  <button class="tb" onclick="go('ur')">&#x1F321;&#xFE0F; Orina</button>
+  <button class="tb" onclick="go('pre')">&#x1F305; Pre Test</button>
+  <button class="tb" onclick="go('dur')">&#x23F1; Durante</button>
+  <button class="tb" onclick="go('pos')">&#x1F307; Post Test</button>
   <button class="tb" onclick="go('na')">&#x1F9C2; Sodio</button>
-  <button class="tb" onclick="go('rp')">&#x1F4CB; Reporte</button>
+  <button class="tb" onclick="go('rp');genRep()">&#x1F4CB; Reporte</button>
 </div>
 
 <!-- ATLETA -->
@@ -127,7 +137,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="ct">Identificacion</div>
     <div class="fg f"><div class="fi"><label>Nombre completo</label><input type="text" id="nombre" placeholder="Nombre del deportista"></div></div>
     <div class="fg t">
-      <div class="fi"><label>Edad</label><input type="number" id="edad" placeholder="anos"></div>
+      <div class="fi"><label>Edad</label><input type="number" id="edad" placeholder="años"></div>
       <div class="fi"><label>Sexo</label><select id="sexo"><option value="">--</option><option>Femenino</option><option>Masculino</option></select></div>
       <div class="fi"><label>Objetivo</label><select id="obj"><option value="">--</option><option>Rendimiento</option><option>Salud</option><option>Seguimiento</option><option>Investigacion</option></select></div>
     </div>
@@ -140,12 +150,20 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <option>Triatlon</option><option>Running</option><option>Calistenia</option>
         <option>Basquetbol</option><option>Futbol</option><option>Voleibol</option>
         <option>Atletismo / Endurance</option><option>Ciclismo</option><option>Natacion</option>
-        <option>Tenis</option><option>Rugby</option><option>Futbol americano</option><option>Otro</option>
+        <option>Tenis</option><option>Tenis profesional</option><option>Raquetball</option><option>Rugby</option><option>Futbol americano</option><option>Otro</option>
       </select>
     </div></div>
     <div class="fg">
       <div class="fi"><label>Tipo de sesion</label><select id="tsesion"><option value="">--</option><option>Entrenamiento</option><option>Partido preparatorio</option><option>Competencia oficial</option><option>Test laboratorio</option></select></div>
-      <div class="fi"><label>Ambiente</label><select id="amb"><option value="">--</option><option>Indoor</option><option>Exterior</option></select></div>
+      <div class="fi"><label>Ambiente</label><select id="amb">
+          <option value="">--</option>
+          <option>Indoor</option>
+          <option>Exterior nublado</option>
+          <option>Exterior despejado sin sol</option>
+          <option>Exterior con sol directo</option>
+          <option>Exterior con viento frio</option>
+          <option>Piscina / Natacion</option>
+        </select></div>
     </div>
     <div class="fg f"><div class="fi"><label>Lugar</label><input type="text" id="lugar" placeholder="Ej: Gimnasio Municipal, Temuco"></div></div>
     <div class="fg t">
@@ -183,100 +201,187 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <button class="btn" onclick="go('sw')">Continuar al Test de Sudor &rarr;</button>
 </div>
 
-<!-- SUDOR -->
-<div class="sec" id="sec-sw">
-  <div class="sh">Test de hidratacion</div>
-  <div class="sd">Pesos y volumenes para calcular tasa de sudoracion y deshidratacion</div>
+<!-- PRE TEST -->
+<div class="sec" id="sec-pre">
+  <div class="sh">Pre Test</div>
+  <div class="sd">Evaluacion del deportista ANTES de iniciar la actividad</div>
+
+  <!-- Color orina PRE -->
   <div class="card">
-    <div class="ct">Mediciones corporales</div>
-    <div class="fg">
-      <div class="fi"><label>Peso PRE (kg)</label><input type="number" id="pre" step="0.1" placeholder="58.3"></div>
-      <div class="fi"><label>Peso POST (kg)</label><input type="number" id="post" step="0.1" placeholder="57.5"></div>
+    <div class="ct">&#x1F321;&#xFE0F; Color de orina PRE</div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:12px;line-height:1.5">Observa la orina antes de comenzar y selecciona el color mas parecido — Escala de Armstrong (1994)</div>
+    <div class="ugrid" id="ugrid-pre">
+      <div class="ubtn" style="background:#FFFF99" onclick="selOrinaPre(1)"><span class="unum">1</span></div>
+      <div class="ubtn" style="background:#FFFF44" onclick="selOrinaPre(2)"><span class="unum">2</span></div>
+      <div class="ubtn" style="background:#FFE135" onclick="selOrinaPre(3)"><span class="unum">3</span></div>
+      <div class="ubtn" style="background:#FFCC00" onclick="selOrinaPre(4)"><span class="unum">4</span></div>
+      <div class="ubtn" style="background:#FFA500" onclick="selOrinaPre(5)"><span class="unum dk">5</span></div>
+      <div class="ubtn" style="background:#FF8C00" onclick="selOrinaPre(6)"><span class="unum dk">6</span></div>
+      <div class="ubtn" style="background:#CC6600" onclick="selOrinaPre(7)"><span class="unum dk">7</span></div>
+      <div class="ubtn" style="background:#8B4513" onclick="selOrinaPre(8)"><span class="unum dk">8</span></div>
     </div>
-    <div class="fg">
-      <div class="fi"><label>Liquido ingerido (L)</label><input type="number" id="liq" step="0.01" placeholder="1.20"></div>
-      <div class="fi"><label>Orina excretada (L)</label><input type="number" id="ori" step="0.01" placeholder="0.35"><span class="ht">0 si no hubo miccion</span></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px">
+      <span style="font-size:.55rem;color:var(--accent3);font-family:'DM Mono',monospace">Bien hidratado</span>
+      <span style="font-size:.55rem;color:var(--danger);font-family:'DM Mono',monospace">Muy deshidratado</span>
     </div>
-    <div class="fg f"><div class="fi"><label>Tiempo actividad (min)</label><input type="number" id="tmin" placeholder="60"></div></div>
+    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin-top:3px;text-align:center;font-size:.5rem;color:var(--muted);font-family:'DM Mono',monospace">
+      <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>
+    </div>
+    <div id="res-ori-pre" style="margin-top:10px"></div>
   </div>
+
+  <!-- Refractometro PRE -->
   <div class="card">
-    <div class="ct">Refractometro USG - Aquatwin</div>
+    <div class="ct">&#x1F52C; Refractometro USG PRE</div>
     <div class="pill">Gravedad especifica de orina PRE-ejercicio</div>
-    <div class="fg f"><div class="fi"><label>USG medido</label><input type="number" id="usg" step="0.001" placeholder="1.018"><span class="ht">Rango optimo: 1.015 - 1.020</span></div></div>
+    <div class="fg f"><div class="fi"><label>USG medido PRE</label>
+      <input type="number" id="usg-pre" step="0.001" placeholder="1.018">
+      <span class="ht">Rango optimo deportista: 1.015 – 1.020</span>
+    </div></div>
     <div style="margin-top:10px">
       <div style="font-size:.62rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:7px;text-transform:uppercase">Clasificacion USG</div>
-      <table class="tb2" id="usgref">
+      <table class="tb2" id="usgref-pre">
         <tr><th>Nivel de hidratacion</th><th>USG</th></tr>
         <tr><td>Extremadamente hiperhidratado</td><td>&lt; 1.012</td></tr>
-        <tr><td>Algo hiperhidratado</td><td>1.012-1.014</td></tr>
-        <tr><td>Bien hidratado</td><td>1.015-1.017</td></tr>
-        <tr><td>Euhidratado</td><td>1.018-1.020</td></tr>
-        <tr><td>Algo deshidratado</td><td>1.021-1.024</td></tr>
-        <tr><td>Muy deshidratado</td><td>1.025-1.027</td></tr>
+        <tr><td>Algo hiperhidratado</td><td>1.012–1.014</td></tr>
+        <tr><td>Bien hidratado</td><td>1.015–1.017</td></tr>
+        <tr><td>Euhidratado</td><td>1.018–1.020</td></tr>
+        <tr><td>Algo deshidratado</td><td>1.021–1.024</td></tr>
+        <tr><td>Muy deshidratado</td><td>1.025–1.027</td></tr>
         <tr><td>Extremadamente deshidratado</td><td>&gt; 1.027</td></tr>
       </table>
     </div>
+    <div id="res-usg-pre" style="margin-top:10px"></div>
   </div>
-  <div class="rb"><b>Referencias</b>Armstrong LE et al. (1994). Urinary indices of hydration status. Int J Sport Nutr, 4(3), 265-279. Maughan RJ &amp; Shirreffs SM (2008). Individual hydration strategies. Int J Sport Nutr Exerc Metab, 18(5), 457-472.</div>
-  <button class="btn" onclick="calcSudor()">Calcular resultados</button>
-  <div class="rw" id="rs">
-    <div class="sdiv"><span>Resultados</span></div>
-    <div class="mg" id="msw"></div>
-    <div id="asw"></div>
-    <div id="ausg"></div>
-    <div class="card"><div class="ct">Formulas aplicadas</div>
-      <div class="fb">
-        <b>Perdida sudor</b> = (Pre - Post) + Liquido - Orina<br>
-        <b>% Deshidratacion</b> = (Pre - Post) / Pre x 100<br>
-        <b>Tasa sudoracion</b> = Perdida sudor / Tiempo (h)<br>
-        <b>Agua/hora necesaria</b> = Tasa sudoracion en ml/h<br>
-        <b>Reposicion post</b> = Perdida masa x 1.5 (ACSM 150%)
+
+  <!-- Peso PRE -->
+  <div class="card">
+    <div class="ct">&#x2696;&#xFE0F; Mediciones corporales PRE</div>
+    <div class="fg">
+      <div class="fi"><label>Peso PRE (kg)</label><input type="number" id="pre" step="0.1" placeholder="58.3"></div>
+      <div class="fi"><label>Duracion actividad (min)</label><input type="number" id="tmin" placeholder="60"></div>
+    </div>
+    <div class="rb" style="margin-top:8px"><b>Referencias</b>Armstrong LE et al. (1994). Urinary indices of hydration status. Int J Sport Nutr, 4(3), 265-279. Maughan RJ &amp; Shirreffs SM (2008). Individual hydration strategies for athletes. Int J Sport Nutr Exerc Metab, 18(5), 457-472.</div>
+  </div>
+  <button class="btn" onclick="go('dur')">Continuar → Durante el Test</button>
+</div>
+
+<!-- DURANTE -->
+<div class="sec" id="sec-dur">
+  <div class="sh">Durante el Test</div>
+  <div class="sd">Registra los volumenes consumidos y la orina generada durante la actividad</div>
+
+  <div class="card">
+    <div class="ct">&#x1F4A7; Liquidos ingeridos</div>
+    <div class="fg">
+      <div class="fi"><label>Agua ingerida (L)</label>
+        <input type="number" id="liq-agua" step="0.01" placeholder="0.50">
+        <span class="ht">Solo agua pura</span>
+      </div>
+      <div class="fi"><label>Isotonico ingerido (L)</label>
+        <input type="number" id="liq-iso" step="0.01" placeholder="0.00">
+        <span class="ht">Bebida deportiva aprox.</span>
+      </div>
+    </div>
+    <div class="fg f">
+      <div class="fi"><label>Total liquido ingerido (L)</label>
+        <input type="number" id="liq" step="0.01" placeholder="0.00" readonly style="background:var(--surface);color:var(--accent3);font-weight:700">
+        <span class="ht">Se calcula automaticamente al ingresar agua + isotonico</span>
       </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="ct">&#x1F6BD; Orina generada durante</div>
+    <div class="fi">
+      <label>Fuiste al bano durante el entrenamiento?</label>
+      <select id="ori-sel" onchange="toggleOriDur()">
+        <option value="0">No fui al bano</option>
+        <option value="0.15">Si, 1 vez (~150 ml)</option>
+        <option value="0.30">Si, 2 veces (~300 ml)</option>
+        <option value="0.45">Si, 3 o mas veces (~450 ml)</option>
+        <option value="custom">Si, quiero ingresar el total exacto</option>
+      </select>
+    </div>
+    <div id="ori-exacto-wrap" style="display:none">
+      <div class="fi">
+        <label>Volumen total de orina durante (ml)</label>
+        <input type="number" id="ori-exacto" placeholder="Ej: 280 ml" step="10" min="0">
+        <span class="ht">Medido con vaso graduado o estimado visualmente</span>
+      </div>
+    </div>
+    <div class="fg f" style="margin-top:8px">
+      <div class="fi"><label>Orina total considerada (L)</label>
+        <input type="number" id="ori" step="0.01" placeholder="0.00" readonly style="background:var(--surface);color:var(--accent2);font-weight:700">
+      </div>
+    </div>
+  </div>
+  <button class="btn" onclick="go('pos')">Continuar → Post Test</button>
+  <button class="btn sec" onclick="go('pre')" style="margin-top:6px">← Volver</button>
 </div>
 
-<!-- ORINA -->
-<div class="sec" id="sec-ur">
-  <div class="sh">Color de orina</div>
-  <div class="sd">Selecciona el color mas parecido a la muestra - Escala de Armstrong (1994)</div>
+<!-- POST TEST -->
+<div class="sec" id="sec-pos">
+  <div class="sh">Post Test</div>
+  <div class="sd">Evaluacion del deportista DESPUES de finalizar la actividad</div>
+
+  <!-- Peso POST -->
   <div class="card">
-    <div class="ct">Escala visual de Armstrong</div>
-    <div style="font-size:.71rem;color:var(--muted);margin-bottom:13px;line-height:1.6">Toca el color que mejor represente la muestra de orina. Escala de 8 puntos validada para estimar el estado de hidratacion de forma rapida y no invasiva.</div>
-    <div class="ag" id="agrid">
-      <div class="ac" style="background:#FFFF99" onclick="selArm(1)"></div>
-      <div class="ac" style="background:#FFFF44" onclick="selArm(2)"></div>
-      <div class="ac" style="background:#FFE135" onclick="selArm(3)"></div>
-      <div class="ac" style="background:#FFCC00" onclick="selArm(4)"></div>
-      <div class="ac" style="background:#FFA500" onclick="selArm(5)"></div>
-      <div class="ac" style="background:#FF8C00" onclick="selArm(6)"></div>
-      <div class="ac" style="background:#CC6600" onclick="selArm(7)"></div>
-      <div class="ac" style="background:#8B4513" onclick="selArm(8)"></div>
+    <div class="ct">&#x2696;&#xFE0F; Peso POST ejercicio</div>
+    <div class="fg f">
+      <div class="fi"><label>Peso POST (kg)</label><input type="number" id="post" step="0.1" placeholder="57.5"></div>
     </div>
-    <div style="display:flex;justify-content:space-between;margin-top:5px">
-      <span style="font-size:.58rem;color:var(--accent3);font-family:'DM Mono',monospace">1 - Muy claro</span>
-      <span style="font-size:.58rem;color:var(--danger);font-family:'DM Mono',monospace">8 - Muy oscuro</span>
+  </div>
+
+  <!-- Color orina POST -->
+  <div class="card">
+    <div class="ct">&#x1F307; Color de orina POST</div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:12px;line-height:1.5">Primera orina al terminar la actividad — Escala de Armstrong (1994)</div>
+    <div class="ugrid" id="ugrid-post">
+      <div class="ubtn" style="background:#FFFF99" onclick="selOrinaPost(1)"><span class="unum">1</span></div>
+      <div class="ubtn" style="background:#FFFF44" onclick="selOrinaPost(2)"><span class="unum">2</span></div>
+      <div class="ubtn" style="background:#FFE135" onclick="selOrinaPost(3)"><span class="unum">3</span></div>
+      <div class="ubtn" style="background:#FFCC00" onclick="selOrinaPost(4)"><span class="unum">4</span></div>
+      <div class="ubtn" style="background:#FFA500" onclick="selOrinaPost(5)"><span class="unum dk">5</span></div>
+      <div class="ubtn" style="background:#FF8C00" onclick="selOrinaPost(6)"><span class="unum dk">6</span></div>
+      <div class="ubtn" style="background:#CC6600" onclick="selOrinaPost(7)"><span class="unum dk">7</span></div>
+      <div class="ubtn" style="background:#8B4513" onclick="selOrinaPost(8)"><span class="unum dk">8</span></div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin-top:3px;text-align:center;font-size:.52rem;color:var(--muted);font-family:'DM Mono',monospace">
+    <div style="display:flex;justify-content:space-between;margin-top:4px">
+      <span style="font-size:.55rem;color:var(--accent3);font-family:'DM Mono',monospace">Bien hidratado</span>
+      <span style="font-size:.55rem;color:var(--danger);font-family:'DM Mono',monospace">Muy deshidratado</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin-top:3px;text-align:center;font-size:.5rem;color:var(--muted);font-family:'DM Mono',monospace">
       <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>
     </div>
-    <div id="armres" style="margin-top:14px"></div>
+    <div id="res-ori-post" style="margin-top:10px"></div>
+    <div id="res-ori-cmp" style="margin-top:6px"></div>
   </div>
+
+  <!-- Refractometro POST -->
   <div class="card">
-    <div class="ct">Tabla de referencia completa</div>
-    <table class="tb2">
-      <tr><th>N</th><th>Color</th><th>Estado</th><th>USG aprox</th></tr>
-      <tr><td>1</td><td>Casi transparente</td><td>Hiperhidratado</td><td>&lt; 1.010</td></tr>
-      <tr><td>2</td><td>Amarillo muy palido</td><td>Bien hidratado</td><td>1.010-1.015</td></tr>
-      <tr><td>3</td><td>Amarillo palido</td><td>Bien hidratado</td><td>1.015-1.020</td></tr>
-      <tr><td>4</td><td>Amarillo</td><td>Euhidratado</td><td>1.018-1.022</td></tr>
-      <tr><td>5</td><td>Amarillo oscuro</td><td>Deshidratacion leve</td><td>1.022-1.025</td></tr>
-      <tr><td>6</td><td>Ambar</td><td>Deshidratacion moderada</td><td>1.025-1.028</td></tr>
-      <tr><td>7</td><td>Naranja oscuro</td><td>Deshidratacion severa</td><td>1.028-1.030</td></tr>
-      <tr><td>8</td><td>Marron</td><td>Deshidratacion grave</td><td>&gt; 1.030</td></tr>
-    </table>
+    <div class="ct">&#x1F52C; Refractometro USG POST</div>
+    <div class="pill">Gravedad especifica de orina POST-ejercicio</div>
+    <div class="fg f"><div class="fi"><label>USG medido POST</label>
+      <input type="number" id="usg-post" step="0.001" placeholder="1.022">
+      <span class="ht">Compara con valor PRE para evaluar cambio</span>
+    </div></div>
+    <div id="res-usg-post" style="margin-top:10px"></div>
   </div>
-  <div class="rb"><b>Referencias</b>Armstrong LE et al. (1994). Urinary indices of hydration status. Int J Sport Nutr, 4(3), 265-279. Armstrong LE et al. (1998). Symptomatic hyponatremia during prolonged exercise in heat. Med Sci Sports Exerc. Kavouras SA (2002). Assessing hydration status. Curr Opin Clin Nutr Metab Care, 5(5), 519-524.</div>
+
+  <!-- Resultados sudor -->
+  <div class="card">
+    <div class="ct">&#x1F4A6; Calculos de hidratacion</div>
+    <div class="rb" style="margin-top:0;margin-bottom:10px"><b>Formulas</b>
+      Perdida sudor = (Pre − Post) + Liquido total − Orina<br>
+      % Deshidratacion = (Pre − Post) / Pre × 100<br>
+      Tasa sudoracion = Perdida sudor / Tiempo (h)<br>
+      Reposicion post = Perdida masa × 1.5 (ACSM)
+    </div>
+    <button class="btn" onclick="calcSudor()">&#x26A1; Calcular resultados</button>
+    <div id="res-sudor" style="margin-top:12px"></div>
+  </div>
+  <button class="btn sec" onclick="go('dur')" style="margin-top:6px">← Volver</button>
 </div>
 
 <!-- SODIO -->
@@ -356,6 +461,160 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 <script>
 var ST={sudor:null,sodio:null,usg:null,arm:null,borg:null,fc:null,fcpct:null};
+
+
+// ── DATOS ARMSTRONG ──
+var OD_ARM=[
+  {n:1,lbl:'Casi transparente',est:'Hiperhidratado',cls:'i',em:'🔵'},
+  {n:2,lbl:'Amarillo muy palido',est:'Excelente hidratacion',cls:'g',em:'✅'},
+  {n:3,lbl:'Amarillo palido',est:'Buena hidratacion',cls:'g',em:'✅'},
+  {n:4,lbl:'Amarillo',est:'Hidratacion aceptable',cls:'g',em:'✅'},
+  {n:5,lbl:'Amarillo oscuro',est:'Deshidratacion leve',cls:'w',em:'⚠️'},
+  {n:6,lbl:'Ambar oscuro',est:'Deshidratacion moderada',cls:'w',em:'⚠️'},
+  {n:7,lbl:'Naranja',est:'Deshidratacion importante',cls:'d',em:'🔴'},
+  {n:8,lbl:'Cafe oscuro',est:'Deshidratacion severa',cls:'d',em:'🔴'}
+];
+var ST_ORINA={pre:null,post:null,usgPre:null,usgPost:null};
+
+function selOrinaPre(n){
+  document.querySelectorAll('#ugrid-pre .ubtn').forEach(function(e,i){e.classList.toggle('on',i===n-1)});
+  var d=OD_ARM[n-1]; ST_ORINA.pre=d;
+  document.getElementById('res-ori-pre').innerHTML='<div class="al '+d.cls+'"><strong>'+d.em+' PRE: '+d.est+' ('+d.lbl+')</strong></div>';
+  // Highlight tabla
+  hlUSGTable('usgref-pre', parseFloat(document.getElementById('usg-pre').value));
+}
+function selOrinaPost(n){
+  document.querySelectorAll('#ugrid-post .ubtn').forEach(function(e,i){e.classList.toggle('on',i===n-1)});
+  var d=OD_ARM[n-1]; ST_ORINA.post=d;
+  document.getElementById('res-ori-post').innerHTML='<div class="al '+d.cls+'"><strong>'+d.em+' POST: '+d.est+' ('+d.lbl+')</strong></div>';
+  // Comparacion PRE vs POST
+  if(ST_ORINA.pre){
+    var diff=n-ST_ORINA.pre.n;
+    var cls=diff<=0?'g':diff<=2?'w':'d';
+    var msg=diff<0?'✅ Hidratacion mejoró durante el test. Excelente estrategia.':
+            diff===0?'✅ Hidratacion mantenida durante el test.':
+            diff<=2?'⚠️ Orina se concentró levemente. Aumentar ingesta durante sesiones similares.':
+            '🔴 Orina se concentró significativamente. Revisar protocolo de hidratacion urgente.';
+    document.getElementById('res-ori-cmp').innerHTML='<div class="al '+cls+'"><strong>📊 Comparacion PRE vs POST</strong>'+msg+' (Armstrong et al., 1994)</div>';
+  }
+}
+
+function hlUSGTable(tableId, val){
+  if(isNaN(val)||val<=0) return;
+  var rows=document.querySelectorAll('#'+tableId+' tr');
+  rows.forEach(function(r){r.classList.remove('hl','w','d')});
+  if(val<1.012)rows[1]&&rows[1].classList.add('hl');
+  else if(val<=1.014)rows[2]&&rows[2].classList.add('hl');
+  else if(val<=1.017)rows[3]&&rows[3].classList.add('hl');
+  else if(val<=1.020)rows[4]&&rows[4].classList.add('hl');
+  else if(val<=1.024){rows[5]&&rows[5].classList.add('hl','w')}
+  else if(val<=1.027){rows[6]&&rows[6].classList.add('hl','w')}
+  else{rows[7]&&rows[7].classList.add('hl','d')}
+}
+
+function cUSG(v){
+  if(v<1.012)return{lbl:'Extremadamente hiperhidratado',cls:'i',em:'🔵'};
+  if(v<=1.014)return{lbl:'Algo hiperhidratado',cls:'i',em:'🔵'};
+  if(v<=1.017)return{lbl:'Bien hidratado',cls:'g',em:'✅'};
+  if(v<=1.020)return{lbl:'Euhidratado',cls:'g',em:'✅'};
+  if(v<=1.024)return{lbl:'Algo deshidratado',cls:'w',em:'⚠️'};
+  if(v<=1.027)return{lbl:'Muy deshidratado',cls:'w',em:'⚠️'};
+  return{lbl:'Extremadamente deshidratado',cls:'d',em:'🔴'};
+}
+
+// Evento USG PRE
+document.addEventListener('DOMContentLoaded', function(){
+  var usgPreEl=document.getElementById('usg-pre');
+  if(usgPreEl) usgPreEl.addEventListener('input',function(){
+    var v=parseFloat(this.value);
+    hlUSGTable('usgref-pre',v);
+    if(!isNaN(v)&&v>0){
+      var c=cUSG(v); ST_ORINA.usgPre=v;
+      document.getElementById('res-usg-pre').innerHTML='<div class="al '+c.cls+'"><strong>'+c.em+' USG PRE '+v.toFixed(3)+' — '+c.lbl+'</strong></div>';
+    }
+  });
+  var usgPostEl=document.getElementById('usg-post');
+  if(usgPostEl) usgPostEl.addEventListener('input',function(){
+    var v=parseFloat(this.value);
+    if(!isNaN(v)&&v>0){
+      var c=cUSG(v); ST_ORINA.usgPost=v;
+      var extra='';
+      if(ST_ORINA.usgPre){
+        var diff=v-ST_ORINA.usgPre;
+        if(diff>0.005) extra=' — USG aumento vs PRE ('+ST_ORINA.usgPre.toFixed(3)+'), mayor concentracion post-ejercicio.';
+        else if(diff<-0.005) extra=' — USG disminuyo vs PRE ('+ST_ORINA.usgPre.toFixed(3)+'), buena hidratacion mantenida.';
+        else extra=' — USG similar al PRE ('+ST_ORINA.usgPre.toFixed(3)+').';
+      }
+      document.getElementById('res-usg-post').innerHTML='<div class="al '+c.cls+'"><strong>'+c.em+' USG POST '+v.toFixed(3)+' — '+c.lbl+'</strong>'+extra+'</div>';
+    }
+  });
+  // Auto-calcular total liquido
+  ['liq-agua','liq-iso'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener('input', function(){
+      var agua=parseFloat(document.getElementById('liq-agua').value)||0;
+      var iso=parseFloat(document.getElementById('liq-iso').value)||0;
+      document.getElementById('liq').value=(agua+iso).toFixed(2);
+    });
+  });
+  // Auto-calcular orina
+  var oriSel=document.getElementById('ori-sel');
+  if(oriSel) oriSel.addEventListener('change', toggleOriDur);
+});
+
+function toggleOriDur(){
+  var sel=document.getElementById('ori-sel').value;
+  document.getElementById('ori-exacto-wrap').style.display=sel==='custom'?'block':'none';
+  if(sel!=='custom'){
+    document.getElementById('ori').value=sel;
+  }
+}
+
+document.addEventListener('input', function(e){
+  if(e.target&&e.target.id==='ori-exacto'){
+    var v=parseFloat(e.target.value)||0;
+    document.getElementById('ori').value=(v/1000).toFixed(3);
+  }
+});
+
+function calcSudor(){
+  var pre=parseFloat(document.getElementById('pre').value);
+  var post=parseFloat(document.getElementById('post').value);
+  var liq=parseFloat(document.getElementById('liq').value)||0;
+  var ori=parseFloat(document.getElementById('ori').value)||0;
+  var tmin=parseFloat(document.getElementById('tmin').value);
+  if(isNaN(pre)||pre<=0){alert('Ingresa el peso PRE.');return}
+  if(isNaN(post)||post<=0){alert('Ingresa el peso POST.');return}
+  if(isNaN(tmin)||tmin<=0){alert('Ingresa la duracion del test.');return}
+  var h=tmin/60;
+  var pm=pre-post;
+  var ps=Math.max(0,pm+liq-ori);
+  var pd=(pm/pre)*100;
+  var tLh=ps/h;
+  var tMm=(ps*1000)/tmin;
+  var rp=pm*1.5;
+  var rd=Math.round((tLh*1000)/4);
+  var dcCls=pd<1?'g':pd<2?'w':'d';
+  var dcLbl=pd<1?'Minima':pd<2?'Leve':pd<3?'Moderada':'Severa';
+  var h2='<div class="mg">';
+  h2+='<div class="m"><div class="m-top '+dcCls+'"></div><div class="m-lbl">Deshidratacion</div><div class="m-val '+dcCls+'">'+pd.toFixed(2)+'%</div><div class="m-sub"><span class="bdg '+dcCls+'">'+dcLbl+'</span></div></div>';
+  h2+='<div class="m"><div class="m-top a"></div><div class="m-lbl">Perdida sudor</div><div class="m-val">'+ps.toFixed(2)+' L</div><div class="m-sub">'+pm.toFixed(1)+' kg masa</div></div>';
+  h2+='<div class="m w"><div class="m-top w"></div><div class="m-lbl">Agua/hora</div><div class="m-val w">'+Math.round(tLh*1000)+' ml/h</div><div class="m-sub">'+tMm.toFixed(1)+' ml/min</div></div>';
+  h2+='<div class="m w"><div class="m-top g"></div><div class="m-lbl">Reposicion post</div><div class="m-val g">'+rp.toFixed(2)+' L</div><div class="m-sub">ACSM 150%</div></div>';
+  h2+='</div>';
+  var amsg={g:'<strong>✅ Hidratacion adecuada ('+pd.toFixed(1)+'%)</strong>Perdida menor al 1%. Rendimiento no comprometido.',
+    w:'<strong>⚠️ Deshidratacion leve ('+pd.toFixed(1)+'%)</strong>A partir del 1% se afecta el rendimiento cognitivo y fisico.',
+    d:'<strong>🔴 Deshidratacion significativa ('+pd.toFixed(1)+'%)</strong>Superar el 2% compromete seriamente el rendimiento.'};
+  h2+='<div class="al '+dcCls+'">'+(amsg[dcCls]||amsg.d)+'</div>';
+  h2+='<div class="al i" style="font-size:.74rem"><strong>💧 Plan para sesiones similares</strong>Beber <b>'+Math.round(tLh*1000)+' ml/hora</b> ('+rd+' ml cada 15 min) durante el ejercicio. Reponer <b>'+rp.toFixed(2)+' L</b> en las 2 horas post-ejercicio (ACSM, 2007).</div>';
+  document.getElementById('res-sudor').innerHTML=h2;
+  // Guardar en ST para el reporte
+  ST.sudor={pre:pre,post:post,liq:liq,ori:ori,tmin:tmin,h:h,
+    pm:pm,ps:ps,pd:pd,tLh:tLh,tMm:tMm,
+    ah:Math.round(tLh*1000),rp:rp,rd:rd,
+    dcCls:dcCls,dcLbl:dcLbl};
+  genRep();
+}
 
 function go(id){
   document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on')});
@@ -616,13 +875,20 @@ function genRep(){
   var hm=document.getElementById('hum').value||'--';
   var am=document.getElementById('amb').value||'--';
   var ts=document.getElementById('tsesion').value||'--';
+  // Intentar calcular sudor si hay datos suficientes
+  var pre=parseFloat(document.getElementById('pre').value);
+  var post=parseFloat(document.getElementById('post').value);
+  var tmin=parseFloat(document.getElementById('tmin').value);
+  if(!isNaN(pre)&&!isNaN(post)&&!isNaN(tmin)&&pre>0&&post>0&&tmin>0&&!ST.sudor){
+    calcSudor();
+  }
   if(!ST.sudor&&!ST.sodio){
-    document.getElementById('repcont').innerHTML='<div class="al i"><strong>Reporte no disponible</strong>Completa el Test de Sudor y/o Sodio para generar el reporte.</div>';
+    document.getElementById('repcont').innerHTML='<div class="al i"><strong>Reporte no disponible</strong>Completa al menos el Pre Test y Post Test (pesos y duracion) para generar el reporte.</div>';
     return;
   }
   var h='<div class="card"><div class="ct">Datos del evaluado/a</div>'+
     '<div class="rr"><span class="rk">Nombre</span><span class="rv">'+nm+'</span></div>'+
-    '<div class="rr"><span class="rk">Edad / Sexo</span><span class="rv">'+ed+' anos / '+sx+'</span></div>'+
+    '<div class="rr"><span class="rk">Edad / Sexo</span><span class="rv">'+ed+' años / '+sx+'</span></div>'+
     '<div class="rr"><span class="rk">Fecha / Hora</span><span class="rv">'+fe+' '+hr+'</span></div>'+
     '<div class="rr"><span class="rk">Disciplina</span><span class="rv">'+di+'</span></div>'+
     '<div class="rr"><span class="rk">Sesion / Ambiente</span><span class="rv">'+ts+' / '+am+'</span></div>'+
@@ -636,7 +902,7 @@ function genRep(){
     '<div class="rr"><span class="rk">Escala visual</span><span class="rv">'+ST.arm.n+'/8 - '+ST.arm.lbl+'</span></div>'+
     '<div class="rr"><span class="rk">Estado hidratacion</span><span class="rv">'+ST.arm.em+' '+ST.arm.est+'</span></div>'+
     '</div>';}
-  if(ST.usg){h+='<div class="card"><div class="ct">USG - Refractometro Aquatwin</div>'+
+  if(ST.usg){h+='<div class="card"><div class="ct">USG - Refractometro</div>'+
     '<div class="rr"><span class="rk">Valor medido</span><span class="rv">'+ST.usg.val.toFixed(3)+'</span></div>'+
     '<div class="rr"><span class="rk">Clasificacion</span><span class="rv">'+ST.usg.em+' '+ST.usg.lbl+'</span></div>'+
     '</div>';}
@@ -648,7 +914,7 @@ function genRep(){
       '<div class="rr"><span class="rk">Perdida de sudor</span><span class="rv">'+s.ps.toFixed(2)+' L</span></div>'+
       '<div class="rr"><span class="rk">% Deshidratacion</span><span class="rv">'+s.pd.toFixed(2)+'% <span class="bdg '+dc.b+'">'+dc.lbl+'</span></span></div>'+
       '<div class="rr"><span class="rk">Tasa sudoracion</span><span class="rv">'+s.tLh.toFixed(2)+' L/h</span></div>'+
-      '<div class="rr"><span class="rk">💧 Agua necesaria/hora</span><span class="rv"><b>'+s.ah.toFixed(0)+' ml/hora</b></span></div>'+
+      '<div class="rr"><span class="rk">💧 Agua necesaria/hora</span><span class="rv"><b>'+Math.round(s.ah)+' ml/hora</b></span></div>'+
       '<div class="rr"><span class="rk">Reposicion post ACSM</span><span class="rv">'+s.rp.toFixed(2)+' L en 2 h</span></div>'+
       '</div>';}
   if(ST.sodio){
@@ -678,6 +944,20 @@ function genRep(){
     '7. HORIBA Scientific (2021). LAQUAtwin Na-11 application note.'+
     '</div>';
 
+
+  // Datos orina PRE/POST en reporte
+  if(ST_ORINA.pre||ST_ORINA.usgPre){
+    h+='<div class="card"><div class="ct">Evaluacion orina PRE ejercicio</div>';
+    if(ST_ORINA.usgPre){var cu=cUSG(ST_ORINA.usgPre);h+='<div class="rr"><span class="rk">USG PRE</span><span class="rv">'+ST_ORINA.usgPre.toFixed(3)+' — '+cu.em+' '+cu.lbl+'</span></div>';}
+    if(ST_ORINA.pre){h+='<div class="rr"><span class="rk">Color PRE</span><span class="rv">'+ST_ORINA.pre.em+' '+ST_ORINA.pre.n+'/8 — '+ST_ORINA.pre.lbl+'</span></div>';}
+    if(ST_ORINA.post){h+='<div class="rr"><span class="rk">Color POST</span><span class="rv">'+ST_ORINA.post.em+' '+ST_ORINA.post.n+'/8 — '+ST_ORINA.post.lbl+'</span></div>';}
+    if(ST_ORINA.usgPost){var cup=cUSG(ST_ORINA.usgPost);h+='<div class="rr"><span class="rk">USG POST</span><span class="rv">'+ST_ORINA.usgPost.toFixed(3)+' — '+cup.em+' '+cup.lbl+'</span></div>';}
+    if(ST_ORINA.pre&&ST_ORINA.post){
+      var diff2=ST_ORINA.post.n-ST_ORINA.pre.n;
+      h+='<div class="rr"><span class="rk">Comparacion PRE/POST</span><span class="rv">'+(diff2<=0?'✅ Hidratacion mantenida o mejorada':diff2<=2?'⚠️ Leve concentracion':'🔴 Concentracion significativa')+'</span></div>';
+    }
+    h+='</div>';
+  }
   var hoy=new Date().toLocaleDateString('es-CL',{year:'numeric',month:'long',day:'numeric'});
   h+='<div class="firma">'+
     '<div style="font-size:.65rem;color:var(--muted);font-family:\'DM Mono\',monospace">Evaluacion realizada el '+hoy+'</div>'+
